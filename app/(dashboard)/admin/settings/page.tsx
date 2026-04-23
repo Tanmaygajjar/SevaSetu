@@ -32,13 +32,13 @@ export default function Page() {
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1">
                   <User size={10} /> Full Name
                 </label>
-                <input type="text" defaultValue={user?.full_name ?? undefined} className="input-minimal text-lg font-bold p-0 border-none bg-transparent focus:ring-0" />
+                <input type="text" defaultValue={user?.full_name ?? ""} className="input-minimal text-lg font-bold p-0 border-none bg-transparent focus:ring-0" />
               </div>
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1">
                   <Mail size={10} /> Email Endpoint
                 </label>
-                <input type="email" defaultValue={user?.email ?? undefined} className="input-minimal text-sm font-medium p-0 border-none bg-transparent focus:ring-0 text-slate-600" readOnly />
+                <input type="email" defaultValue={user?.email ?? ""} className="input-minimal text-sm font-medium p-0 border-none bg-transparent focus:ring-0 text-slate-600" readOnly />
               </div>
               <div className="space-y-1">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1">
