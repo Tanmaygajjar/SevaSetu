@@ -1,8 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Search, Building2, MapPin, ExternalLink, Globe, Heart } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { ConfettiCelebration } from '@/components/shared/ConfettiCelebration';
+import { DonationModal } from '@/components/shared/DonationModal';
 
 const NGOS = [
   {
@@ -12,6 +15,7 @@ const NGOS = [
     description: 'Rapid response team for flood and earthquake relief across Saurashtra.',
     impact: '15,000+ lives touched',
     verified: true,
+    website: 'https://sanjeevanirelief.org',
   },
   {
     name: 'Disha Foundation',
@@ -20,6 +24,7 @@ const NGOS = [
     description: 'Empowering underprivileged children through digital literacy and bridge schools.',
     impact: '5,000+ students graduated',
     verified: true,
+    website: 'https://dishafoundation.edu.in',
   },
   {
     name: 'Green Earth Initiative',
@@ -28,6 +33,7 @@ const NGOS = [
     description: 'Urban afforestation and waste management consultants for smart cities.',
     impact: '100k+ trees planted',
     verified: true,
+    website: 'https://greenearthinitiative.org',
   },
   {
     name: 'Helping Hands India',
@@ -36,6 +42,7 @@ const NGOS = [
     description: 'Mobile clinics providing healthcare to remote tribal areas in Gujarat.',
     impact: '25,000+ patients treated',
     verified: false,
+    website: 'https://helpinghandsindia.in',
   },
   {
     name: 'Food For All',
@@ -44,6 +51,7 @@ const NGOS = [
     description: 'Daily meal distribution to homeless and low-income families.',
     impact: '1M+ meals served',
     verified: true,
+    website: 'https://foodforallindia.org',
   },
   {
     name: 'Asha Center',
@@ -52,12 +60,58 @@ const NGOS = [
     description: 'Skilling and micro-finance for rural women entrepreneurs.',
     impact: '2,000+ self-reliant women',
     verified: true,
+    website: 'https://ashacenter.org',
   }
 ];
 
 export default function NgosPage() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [celebratingNGO, setCelebratingNGO] = useState<string | null>(null);
+  const [donatingTo, setDonatingTo] = useState<string | null>(null);
+
+  const filteredNgos = NGOS.filter(ngo => {
+    const matchesSearch = ngo.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         ngo.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All Categories' || ngo.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleDonate = (ngoName: string) => {
+    setDonatingTo(ngoName);
+  };
+
+  const handleDonationSuccess = () => {
+    if (donatingTo) {
+      setCelebratingNGO(donatingTo);
+      setDonatingTo(null);
+    }
+  };
+
+  const handleVisitWebsite = (url: string, ngoName: string) => {
+    toast(`Redirecting to ${ngoName}'s official website...`, { icon: '🌐' });
+    setTimeout(() => {
+      window.open(url, '_blank');
+    }, 800);
+  };
+
   return (
     <div className="min-h-screen bg-[var(--surface)] pt-24 pb-20">
+      {celebratingNGO && (
+        <ConfettiCelebration 
+          message={`Thank you for your generous contribution to ${celebratingNGO}! Your support helps us build a more resilient community.`}
+          onComplete={() => setCelebratingNGO(null)} 
+        />
+      )}
+
+      {donatingTo && (
+        <DonationModal 
+          ngoName={donatingTo} 
+          onClose={() => setDonatingTo(null)}
+          onSuccess={handleDonationSuccess}
+        />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Section */}
@@ -79,21 +133,29 @@ export default function NgosPage() {
             <input 
               type="text" 
               placeholder="Search by name, location or cause..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-[var(--border)] focus:ring-2 focus:ring-[var(--saffron-glow)] focus:border-[var(--saffron)] outline-none"
             />
           </div>
-          <select className="px-6 py-3 rounded-xl border border-[var(--border)] bg-white font-medium text-[var(--ink-muted)] outline-none focus:ring-2 focus:ring-[var(--saffron-glow)]">
+          <select 
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-6 py-3 rounded-xl border border-[var(--border)] bg-white font-medium text-[var(--ink-muted)] outline-none focus:ring-2 focus:ring-[var(--saffron-glow)]"
+          >
             <option>All Categories</option>
             <option>Disaster Relief</option>
             <option>Education</option>
             <option>Healthcare</option>
             <option>Environment</option>
+            <option>Hunger Relief</option>
+            <option>Women Empowerment</option>
           </select>
         </div>
 
         {/* NGO Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {NGOS.map((ngo, i) => (
+          {filteredNgos.map((ngo, i) => (
             <div key={i} className="card group hover:scale-[1.02] transition-all bg-white border border-[var(--border)] rounded-2xl p-6 flex flex-col h-full shadow-sm hover:shadow-xl">
               <div className="flex justify-between items-start mb-4">
                 <div className="w-14 h-14 rounded-2xl bg-[var(--surface-2)] flex items-center justify-center text-[var(--saffron)] group-hover:bg-[var(--saffron)] group-hover:text-white transition-colors">
@@ -125,10 +187,17 @@ export default function NgosPage() {
                   <span className="text-sm font-bold text-[var(--ink)]">{ngo.impact}</span>
                 </div>
                 <div className="flex gap-2">
-                   <button className="p-2 rounded-lg bg-[var(--surface-2)] text-[var(--ink-muted)] hover:bg-[var(--saffron-light)] hover:text-[var(--saffron)] transition-colors">
+                   <button 
+                    onClick={() => handleVisitWebsite(ngo.website, ngo.name)}
+                    title="Visit Website"
+                    className="p-2 rounded-lg bg-[var(--surface-2)] text-[var(--ink-muted)] hover:bg-[var(--saffron-light)] hover:text-[var(--saffron)] transition-colors"
+                   >
                      <Globe size={18} />
                    </button>
-                   <button className="px-4 py-2 rounded-lg bg-[var(--saffron)] text-white text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg shadow-[var(--saffron-glow)]">
+                   <button 
+                    onClick={() => handleDonate(ngo.name)}
+                    className="px-4 py-2 rounded-lg bg-[var(--saffron)] text-white text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-lg shadow-[var(--saffron-glow)]"
+                   >
                      Donate <Heart size={14} />
                    </button>
                 </div>

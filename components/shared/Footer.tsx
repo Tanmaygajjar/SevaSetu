@@ -76,7 +76,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-white/10 text-center">
           <p className="text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} SevaSetu. Built with <span className="text-[var(--saffron)]">❤</span> for India. Google Solution Challenge 2025.
+            &copy; {new Date().getFullYear()} SevaSetu. Built with <span className="text-[var(--saffron)]">❤</span> for India.
           </p>
         </div>
       </div>
