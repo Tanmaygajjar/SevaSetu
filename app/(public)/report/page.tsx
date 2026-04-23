@@ -229,28 +229,31 @@ export default function ReportPage() {
     const toastId = toast.loading('Publishing incident report...');
 
     try {
+      const needRef = doc(collection(db, 'needs'));
+      
       // 🛡️ DEMO-FIRST STRATEGY: Use Base64 to bypass CORS issues entirely for the presentation
-      const imageUrls = [];
+      const imageUrls: string[] = [];
       for (const file of formData.photos) {
-        const base64 = await new Promise((resolve) => {
+        const base64 = await new Promise<string>((resolve) => {
           const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
+          reader.onloadend = () => resolve(reader.result as string);
           reader.readAsDataURL(file);
         });
-        imageUrls.push(base64 as string);
+        imageUrls.push(base64);
       }
 
       // 2. Save to Firestore
+      const { photos, ...rest } = formData;
       await setDoc(needRef, {
         ...rest,
-        location_lat: lat,
-        location_lng: lng,
+        location_lat: formData.lat,
+        location_lng: formData.lng,
         id: needRef.id,
         status: 'verified',
         urgency_score: formData.severity,
         ai_summary: aiAnalysis.valid ? 'Verified by Gemini AI' : 'Needs manual review',
         created_at: new Date().toISOString(),
-        image_urls: imageUrls,
+        photo_urls: imageUrls,
         population_count: formData.population,
         visual_verified: true
       });

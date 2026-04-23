@@ -6,8 +6,24 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+interface NGOData {
+  id: number;
+  name: string;
+  type: string;
+  d: string;
+  s: string;
+  h: string;
+  reg: string;
+  contact: string;
+  email: string;
+  phone: string;
+  sectors: string[];
+  bio: string;
+  audits: string;
+}
+
 export default function Page() {
-  const [selectedNgo, setSelectedNgo] = useState<any>(null);
+  const [selectedNgo, setSelectedNgo] = useState<NGOData | null>(null);
 
   const ngos = [
     { 
@@ -132,7 +148,7 @@ export default function Page() {
                     <section>
                         <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Operating Sectors</h4>
                         <div className="flex flex-wrap gap-2">
-                            {selectedNgo.sectors.map(s => (
+                            {selectedNgo.sectors.map((s: string) => (
                                 <span key={s} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-bold border border-blue-100 flex items-center gap-1.5 underline-offset-4 decoration-2">
                                     <CheckCircle2 size={12} /> {s}
                                 </span>

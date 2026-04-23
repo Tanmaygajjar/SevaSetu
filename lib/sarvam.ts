@@ -78,7 +78,7 @@ export async function speechToText(
     if (!apiKey) throw new Error('SARVAM_API_KEY not configured');
 
     const formData = new FormData();
-    formData.append('file', new Blob([audioBuffer]), 'audio.wav');
+    formData.append('file', new Blob([new Uint8Array(audioBuffer)]), 'audio.wav');
     formData.append('language_code', languageCode);
 
     const response = await fetch(`${SARVAM_BASE_URL}/speech-to-text`, {

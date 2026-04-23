@@ -177,7 +177,7 @@ export default function Page() {
              </div>
 
              <div className="flex flex-wrap gap-1.5 mb-6 flex-1">
-                {v.skills.slice(0, 2).map(s => (
+                {v.skills.slice(0, 2).map((s: string) => (
                   <span key={s} className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-md text-[10px] font-bold uppercase text-gray-500 tracking-wider ">{s}</span>
                 ))}
                 {v.skills.length > 2 && <span className="text-[10px] font-bold text-gray-600">+{v.skills.length - 2} more</span>}
@@ -252,7 +252,7 @@ export default function Page() {
                     <section>
                         <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Verified Skillset</h4>
                         <div className="flex flex-wrap gap-2">
-                            {selectedVolunteer.skills.map(s => (
+                            {selectedVolunteer.skills.map((s: string) => (
                                 <span key={s} className="px-3 py-1 bg-[var(--surface-3)] text-[var(--ink)] rounded-lg text-xs font-bold border border-[var(--border)]">{s}</span>
                             ))}
                         </div>
@@ -261,7 +261,7 @@ export default function Page() {
                     <section>
                         <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Achievements</h4>
                         <div className="flex flex-wrap gap-2">
-                            {selectedVolunteer.badges.map(b => (
+                            {selectedVolunteer.badges.map((b: string) => (
                                 <span key={b} className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-xl text-[10px] font-bold border border-yellow-100">
                                     <Award size={12} /> {b}
                                 </span>

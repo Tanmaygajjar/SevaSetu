@@ -329,14 +329,14 @@ export default function NeedsMap() {
           
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {/* Visual Gallery */}
-            {selectedNeed.image_urls && selectedNeed.image_urls.length > 0 && (
+            {selectedNeed.photo_urls && selectedNeed.photo_urls.length > 0 && (
               <div className="space-y-3">
                 <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                   <Camera size={14} /> Incident Documentation
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
-                  {selectedNeed.image_urls.map((url, i) => (
-                    <div key={i} className={`rounded-[24px] overflow-hidden border border-slate-100 shadow-sm ${i === 0 && selectedNeed.image_urls.length === 1 ? 'col-span-2' : ''}`}>
+                  {selectedNeed.photo_urls.map((url: string, i: number) => (
+                    <div key={i} className={`rounded-[24px] overflow-hidden border border-slate-100 shadow-sm ${i === 0 && selectedNeed.photo_urls.length === 1 ? 'col-span-2' : ''}`}>
                       <img src={url} alt="Incident" className="w-full h-40 object-cover hover:scale-105 transition-transform duration-500 cursor-zoom-in" />
                     </div>
                   ))}

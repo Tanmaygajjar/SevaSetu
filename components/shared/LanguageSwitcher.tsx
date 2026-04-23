@@ -61,12 +61,12 @@ export function LanguageSwitcher({ isSidebar }: { isSidebar?: boolean }) {
                     const elements = document.querySelectorAll('h1, h2, h3, p, span, button');
                     for (const el of Array.from(elements)) {
                       // Filter out icons and small bits
-                      if (el.innerText.length > 3 && !el.querySelector('svg')) {
+                      if ((el as HTMLElement).innerText.length > 3 && !el.querySelector('svg')) {
                         const res = await fetch('/api/ai/translate', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({ 
-                            text: el.innerText,
+                            text: (el as HTMLElement).innerText,
                             source_language: 'en-IN',
                             target_language: lang.code + '-IN'
                           })

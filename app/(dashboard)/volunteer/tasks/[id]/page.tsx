@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot, getDoc, updateDoc } from 'firebase/firestore';
-import { MapPin, Clock, ArrowLeft, Navigation, CheckCircle2, Phone, MessageSquare, Shield, AlertTriangle } from 'lucide-react';
+import { MapPin, Clock, ArrowLeft, Navigation, CheckCircle2, Phone, MessageSquare, Shield, AlertTriangle, Users } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -37,10 +37,10 @@ export default function TaskDetailPage() {
       
       if (needDoc.exists()) {
         setTask({
-          id: docSnap.id,
           ...taskData,
+          id: docSnap.id,
           need: { id: needDoc.id, ...needDoc.data() } as Need
-        });
+        } as (Task & { need: Need }));
       }
       setLoading(false);
     });
@@ -199,4 +199,3 @@ export default function TaskDetailPage() {
   );
 }
 
-import { Users } from 'lucide-react';

@@ -61,12 +61,12 @@ export function AuditLedger() {
           </div>
         </div>
         <button onClick={downloadLogs} className="p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-slate-400 hover:text-white border border-white/5">
-           <svg size={16} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 font-mono text-[11px] space-y-3 custom-scrollbar">
-        {logs.map((log) => (
+        {logs.map((log: any) => (
           <div key={log.id} className="group animate-in slide-in-from-bottom-2 duration-300 border-l border-slate-800 pl-4 py-2 hover:bg-white/[0.02] transition-all">
             <div className="flex justify-between items-center mb-1.5">
               <span className="text-slate-500 font-bold">[{new Date(log.time).toLocaleTimeString()}]</span>

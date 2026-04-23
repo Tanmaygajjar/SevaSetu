@@ -58,6 +58,7 @@ export interface Profile {
   avatar_url: string | null;
   profile_image?: string;
   role: UserRole;
+  skills?: string[];
   preferred_lang: string;
   is_active: boolean;
   created_at: string;
@@ -174,6 +175,7 @@ export interface Task {
   match_breakdown: MatchBreakdown | null;
   scheduled_at: string | null;
   accepted_at: string | null;
+  assigned_at?: string | null;
   started_at: string | null;
   completed_at: string | null;
   estimated_hours: number;

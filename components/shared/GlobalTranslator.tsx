@@ -28,7 +28,7 @@ export function GlobalTranslator() {
         // We'll process them in batches to avoid overwhelming the API
         const batchSize = 5;
         const arrayElements = Array.from(elements).filter(el => {
-          const text = el.innerText?.trim();
+          const text = (el as HTMLElement).innerText?.trim();
           return text && text.length > 3 && !el.querySelector('svg');
         });
 
@@ -40,7 +40,7 @@ export function GlobalTranslator() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                  text: el.innerText,
+                  text: (el as HTMLElement).innerText,
                   source_language: 'en-IN',
                   target_language: currentLanguage + '-IN'
                 })

@@ -50,7 +50,7 @@ export default function VolunteerDashboard() {
       
       const needDoc = await getDoc(doc(db, 'needs', taskData.need_id));
       if (needDoc.exists()) {
-        setActiveTask({ id: taskId, ...taskData, need: { id: needDoc.id, ...needDoc.data() } as Need });
+        setActiveTask({ ...taskData, id: taskId, need: { id: needDoc.id, ...needDoc.data() } as Need });
       }
       setTaskLoading(false);
     });
@@ -124,7 +124,7 @@ export default function VolunteerDashboard() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold font-mukta mb-2 text-[var(--ink)]">
-          Welcome back, {user?.full_name.split(' ')[0]} 👋
+          Welcome back, {user?.full_name?.split(' ')[0] ?? 'Hero'} 👋
         </h1>
         <p className="text-[var(--ink-muted)]">Here's how you're making an impact in {CITIES[0].name}.</p>
       </div>
@@ -173,7 +173,7 @@ export default function VolunteerDashboard() {
             <div className="card border-[var(--saffron)] shadow-md shadow-[var(--saffron-glow)]">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold px-2 py-1 bg-[var(--saffron)] text-white rounded">IN PROGRESS</span>
-                <span className="text-xs text-[var(--ink-muted)]">Assigned {timeAgo(activeTask.assigned_at)}</span>
+                <span className="text-xs text-[var(--ink-muted)]">Assigned {timeAgo(activeTask.assigned_at || activeTask.created_at)}</span>
               </div>
               <h3 className="text-lg font-bold font-mukta mb-2">{activeTask.need.title}</h3>
               <p className="text-[var(--ink-muted)] text-sm mb-6">{activeTask.need.description}</p>
