@@ -35,18 +35,23 @@ export function matchVolunteers(
 function calculateBreakdown(need: Need, volunteer: Volunteer): MatchBreakdown {
   // Skill fit (35 pts)
   let skillFit = 35;
-  if (need.required_skills.length > 0) {
-    const matched = need.required_skills.filter(s =>
-      volunteer.skills.includes(s)
+  const needSkills = need.required_skills || [];
+  const volunteerSkills = volunteer.skills || [];
+
+  if (needSkills.length > 0) {
+    const matched = needSkills.filter(s =>
+      volunteerSkills.includes(s)
     ).length;
-    skillFit = (matched / need.required_skills.length) * 35;
+    skillFit = (matched / needSkills.length) * 35;
   }
 
   // Proximity (30 pts)
-  const distKm = haversineDistance(
-    volunteer.location_lat, volunteer.location_lng,
-    need.location_lat, need.location_lng
-  );
+  const vLat = volunteer.location_lat || 0;
+  const vLng = volunteer.location_lng || 0;
+  const nLat = need.location_lat || 0;
+  const nLng = need.location_lng || 0;
+
+  const distKm = haversineDistance(vLat, vLng, nLat, nLng);
   let proximity = 0;
   if (distKm <= 1) proximity = 30;
   else if (distKm <= 3) proximity = 25;
@@ -75,8 +80,9 @@ function calculateBreakdown(need: Need, volunteer: Volunteer): MatchBreakdown {
   }
 
   // Performance (15 pts)
-  const avgRating = volunteer.total_tasks_done > 0
-    ? 3.5 + (volunteer.total_tasks_done * 0.1) // Simulated; real would use avg rating from tasks
+  const totalDone = volunteer.total_tasks_done || 0;
+  const avgRating = totalDone > 0
+    ? 3.5 + (totalDone * 0.1) 
     : 3.5;
   const performance = Math.min((avgRating / 5) * 15, 15);
 

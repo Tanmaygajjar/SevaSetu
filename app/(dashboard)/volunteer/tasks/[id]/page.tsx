@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase/config';
 import { doc, onSnapshot, getDoc, updateDoc } from 'firebase/firestore';
-import { MapPin, Clock, ArrowLeft, Navigation, CheckCircle2, Phone, MessageSquare, Shield, AlertTriangle } from 'lucide-react';
+import { MapPin, Clock, ArrowLeft, Navigation, CheckCircle2, Phone, MessageSquare, Shield, AlertTriangle, Users } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Need, Task } from '@/types';
 import { timeAgo, getUrgencyClass } from '@/lib/utils';
+import { ReporterChat } from '@/components/shared/ReporterChat';
 
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
@@ -21,6 +22,7 @@ export default function TaskDetailPage() {
   const router = useRouter();
   const [task, setTask] = useState<(Task & { need: Need }) | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -164,10 +166,16 @@ export default function TaskDetailPage() {
                 <CheckCircle2 size={20} className="mr-2" /> Mark as Completed
               </button>
               
-              <button className="btn-ghost w-full justify-center border border-[var(--border)]">
+              <button 
+                onClick={() => toast.success('Connecting to NGO Support Node...')}
+                className="btn-ghost w-full justify-center border border-[var(--border)]"
+              >
                 <Phone size={18} className="mr-2" /> Call NGO Support
               </button>
-              <button className="btn-ghost w-full justify-center border border-[var(--border)]">
+              <button 
+                onClick={() => setIsChatOpen(true)}
+                className="btn-ghost w-full justify-center border border-[var(--border)]"
+              >
                 <MessageSquare size={18} className="mr-2" /> Message Reporter
               </button>
             </div>
@@ -195,8 +203,13 @@ export default function TaskDetailPage() {
           </div>
         </div>
       </div>
+
+      <ReporterChat 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        need={task.need} 
+      />
     </div>
   );
 }
 
-import { Users } from 'lucide-react';
