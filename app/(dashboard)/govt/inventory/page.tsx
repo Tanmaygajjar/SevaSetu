@@ -30,7 +30,7 @@ export default function Page() {
                            <div className={`w-2 h-2 rounded-full ${s.c === 'red' ? 'bg-red-500' : s.c === 'orange' ? 'bg-orange-500' : 'bg-green-500'}`} />
                            <p className="text-sm font-bold">{s.n}</p>
                         </div>
-                        <p className="text-xs font-bold text-gray-400">{s.q}</p>
+                        <p className="text-xs font-bold text-gray-600">{s.q}</p>
                      </div>
                      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                         <div className={`h-full ${s.c === 'red' ? 'bg-red-500' : s.c === 'orange' ? 'bg-orange-500' : 'bg-blue-600'} transition-all duration-1000`} style={{ width: `${s.p}%` }} />
@@ -51,7 +51,7 @@ export default function Page() {
             
             <div className="card p-6 border-dashed border-blue-200">
                <h4 className="font-bold text-sm mb-2 flex items-center gap-2 text-blue-700"><Ship size={16} /> Regional Ports</h4>
-               <p className="text-[10px] text-gray-400 font-medium uppercase tracking-widest leading-relaxed">External supply intake channels: Kandla (Active), Mundra (Active), Navlakhi (Maintenance).</p>
+               <p className="text-[10px] text-gray-600 font-medium uppercase tracking-widest leading-relaxed">External supply intake channels: Kandla (Active), Mundra (Active), Navlakhi (Maintenance).</p>
             </div>
          </div>
       </div>

@@ -145,6 +145,37 @@ export default function NeedsMap() {
     }
   };
 
+  const [isRadarLoading, setIsRadarLoading] = useState(false);
+  const [radarInsights, setRadarInsights] = useState<any | null>(null);
+
+  const handleRadar = async () => {
+    if (filteredNeeds.length === 0) {
+      toast.error('No needs detected on map to scan.');
+      return;
+    }
+    setIsRadarLoading(true);
+    const toastId = toast.loading('AI Radar scanning regional needs...', { icon: '📡' });
+    
+    try {
+      const res = await fetch('/api/ai/radar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ needs: filteredNeeds })
+      });
+      
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      
+      setRadarInsights(data);
+      toast.success('AI Radar scan complete. Strategic insights generated.', { id: toastId });
+    } catch (error) {
+      console.error('Radar failed', error);
+      toast.error('AI Radar scan failed.', { id: toastId });
+    } finally {
+      setIsRadarLoading(false);
+    }
+  };
+
   return (
     <div className="flex w-full h-full relative overflow-hidden">
       {/* Left Sidebar */}
@@ -172,8 +203,12 @@ export default function NeedsMap() {
             <button className="flex-1 py-1.5 px-3 bg-[var(--surface-2)] rounded-md text-xs font-medium flex items-center justify-center gap-1 hover:bg-[var(--surface-3)]">
               <Filter size={14} /> Filter
             </button>
-            <button className="flex-1 py-1.5 px-3 bg-indigo-50 text-indigo-700 rounded-md text-xs font-bold flex items-center justify-center gap-1 hover:bg-indigo-100">
-              <Sparkles size={14} /> AI Radar
+            <button 
+              onClick={handleRadar}
+              disabled={isRadarLoading}
+              className={`flex-1 py-1.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-1 transition-all ${isRadarLoading ? 'bg-indigo-600 text-white animate-pulse' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'}`}
+            >
+              <Sparkles size={14} /> {isRadarLoading ? 'Scanning...' : 'AI Radar'}
             </button>
           </div>
         </div>
@@ -258,7 +293,7 @@ export default function NeedsMap() {
           <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--surface)]">
             <div>
               <h3 className="font-bold font-mukta text-lg">Crisis Inspection</h3>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Need ID: #{selectedNeed.id}</p>
+              <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-0.5">Need ID: #{selectedNeed.id}</p>
             </div>
             <div className="flex items-center gap-2">
               <button 
@@ -296,7 +331,7 @@ export default function NeedsMap() {
             {/* Visual Gallery */}
             {selectedNeed.image_urls && selectedNeed.image_urls.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                   <Camera size={14} /> Incident Documentation
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
@@ -356,7 +391,7 @@ export default function NeedsMap() {
             </div>
 
             <div className="space-y-4">
-               <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Required Resources</h4>
+               <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest">Required Resources</h4>
                <div className="grid grid-cols-2 gap-3">
                   <div className="p-4 bg-gray-50 border border-gray-100 rounded-2xl flex items-center gap-3">
                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[var(--saffron)] shadow-sm"><CheckCircle2 size={16} /></div>
@@ -396,16 +431,16 @@ export default function NeedsMap() {
               <div className="w-full space-y-4 mb-10">
                  <div className="flex items-center gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100 text-left hover:border-green-200 transition-colors">
                     <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-green-600"><Heart size={20} /></div>
-                    <div><p className="text-xs font-bold">Karma Accrual</p><p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">+500 Points Potential</p></div>
+                    <div><p className="text-xs font-bold">Karma Accrual</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">+500 Points Potential</p></div>
                  </div>
                  <div className="flex items-center gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100 text-left hover:border-blue-200 transition-colors">
                     <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600"><MessageSquare size={20} /></div>
-                    <div><p className="text-xs font-bold">Deployment Hub</p><p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Connect with HQ via SevaSetu Chat</p></div>
+                    <div><p className="text-xs font-bold">Deployment Hub</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Connect with HQ via SevaSetu Chat</p></div>
                  </div>
               </div>
 
               <div className="flex gap-3 w-full">
-                 <button onClick={() => setIsResolving(false)} className="flex-1 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest hover:bg-gray-100 rounded-2xl transition-all">Cancel</button>
+                 <button onClick={() => setIsResolving(false)} className="flex-1 py-4 text-xs font-bold text-gray-600 uppercase tracking-widest hover:bg-gray-100 rounded-2xl transition-all">Cancel</button>
                  <button 
                     onClick={() => {
                        // Auto-login as demo volunteer if not authenticated
@@ -433,6 +468,93 @@ export default function NeedsMap() {
               >
                 <X size={20} />
               </button>
+           </div>
+        </div>
+      )}
+
+      {/* AI RADAR INSIGHTS OVERLAY */}
+      {radarInsights && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] md:w-[600px] z-[1000] animate-in slide-in-from-bottom-10 duration-500">
+           <div className="bg-slate-900 text-white rounded-[32px] shadow-2xl border border-white/10 p-8 relative overflow-hidden">
+              {/* Background Glow */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-600 opacity-20 blur-3xl rounded-full" />
+              <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-600 opacity-20 blur-3xl rounded-full" />
+              
+              <div className="flex justify-between items-start mb-6 relative z-10">
+                 <div>
+                    <h3 className="text-xl font-bold font-mukta flex items-center gap-2">
+                       <Sparkles className="text-indigo-400" size={20} /> AI Strategic Radar
+                    </h3>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Real-time predictive intelligence</p>
+                 </div>
+                 <button onClick={() => setRadarInsights(null)} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">&times;</button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 relative z-10">
+                 <div className="space-y-4">
+                    <div>
+                       <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-[2px] mb-2">Primary Hotspot</h4>
+                       <p className="text-sm font-bold">{radarInsights.hotspot}</p>
+                    </div>
+                    <div>
+                       <h4 className="text-[10px] font-black text-purple-400 uppercase tracking-[2px] mb-2">Emerging Patterns</h4>
+                       <ul className="space-y-1.5">
+                          {radarInsights.patterns?.map((p: string, i: number) => (
+                             <li key={i} className="text-xs text-slate-300 flex items-start gap-2">
+                                <div className="w-1 h-1 rounded-full bg-purple-400 mt-1.5 shrink-0" /> {p}
+                             </li>
+                          ))}
+                       </ul>
+                    </div>
+                    <div>
+                       <h4 className="text-[10px] font-black text-green-400 uppercase tracking-[2px] mb-2">Positive Signal</h4>
+                       <p className="text-xs text-slate-300 italic">"{radarInsights.positiveSignal}"</p>
+                    </div>
+                 </div>
+
+                 <div className="space-y-4">
+                    <div>
+                       <h4 className="text-[10px] font-black text-orange-400 uppercase tracking-[2px] mb-2">Cascading Risks</h4>
+                       <ul className="space-y-1.5">
+                          {radarInsights.risks?.map((r: string, i: number) => (
+                             <li key={i} className="text-xs text-slate-300 flex items-start gap-2">
+                                <div className="w-1 h-1 rounded-full bg-orange-400 mt-1.5 shrink-0" /> {r}
+                             </li>
+                          ))}
+                       </ul>
+                    </div>
+                    <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                       <h4 className="text-[10px] font-black text-white uppercase tracking-[2px] mb-3 flex items-center gap-1.5">
+                          <Shield size={12} className="text-indigo-400" /> Strategic Action
+                       </h4>
+                       <ul className="space-y-2">
+                          {radarInsights.recommendations?.map((r: string, i: number) => (
+                             <li key={i} className="text-[11px] font-medium leading-relaxed text-slate-200">
+                                <span className="text-indigo-400 font-bold">#{i+1}</span> {r}
+                             </li>
+                          ))}
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+
+              <div className="flex gap-3 relative z-10">
+                 <button 
+                    onClick={() => {
+                       toast.success('Strategy dispatched to district command center');
+                       setRadarInsights(null);
+                    }}
+                    className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-indigo-900/20"
+                 >
+                    Dispatch Recommendations
+                 </button>
+                 <button 
+                    onClick={() => setRadarInsights(null)}
+                    className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl text-xs font-bold transition-all"
+                 >
+                    Dismiss
+                 </button>
+              </div>
            </div>
         </div>
       )}

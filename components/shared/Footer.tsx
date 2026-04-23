@@ -15,7 +15,7 @@ export function Footer() {
               <span className="text-2xl font-bold font-mukta text-[var(--saffron)]">सेवा</span>
               <span className="text-2xl font-bold font-mukta text-white">सेतु</span>
             </Link>
-            <p className="text-gray-400 text-sm mb-6 max-w-xs">
+            <p className="text-gray-300 text-sm mb-6 max-w-xs">
               AI-powered civic platform connecting community needs with volunteers in real-time. Built for India.
             </p>
             <div className="flex gap-2 flex-wrap">
@@ -31,11 +31,11 @@ export function Footer() {
           <div>
             <h4 className="font-bold font-mukta text-lg mb-4 text-white">Platform</h4>
             <ul className="space-y-3">
-              <li><Link href="/map" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Needs Map</Link></li>
-              <li><Link href="/ngos" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">NGO Directory</Link></li>
-              <li><Link href="/report" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Report a Need</Link></li>
-              <li><Link href="/about" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">About Us</Link></li>
-              <li><Link href="/blog" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Blog & Stories</Link></li>
+              <li><Link href="/map" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Needs Map</Link></li>
+              <li><Link href="/ngos" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">NGO Directory</Link></li>
+              <li><Link href="/report" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Report a Need</Link></li>
+              <li><Link href="/about" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">About Us</Link></li>
+              <li><Link href="/blog" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Blog & Stories</Link></li>
             </ul>
           </div>
 
@@ -43,10 +43,10 @@ export function Footer() {
           <div>
             <h4 className="font-bold font-mukta text-lg mb-4 text-white">For Organizations</h4>
             <ul className="space-y-3">
-              <li><Link href="/join" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Register NGO</Link></li>
-              <li><Link href="/login" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Coordinator Login</Link></li>
-              <li><Link href="/impact" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Impact Reports</Link></li>
-              <li><Link href="/ngo/data-intake" className="text-gray-400 hover:text-[var(--saffron)] transition-colors text-sm">Data Intake API</Link></li>
+              <li><Link href="/join" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Register NGO</Link></li>
+              <li><Link href="/login" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Coordinator Login</Link></li>
+              <li><Link href="/impact" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Impact Reports</Link></li>
+              <li><Link href="/ngo/data-intake" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Data Intake API</Link></li>
             </ul>
           </div>
 
@@ -54,22 +54,22 @@ export function Footer() {
           <div>
             <h4 className="font-bold font-mukta text-lg mb-4 text-white">Connect</h4>
             <div className="flex gap-4 mb-6">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[var(--saffron)] hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-[var(--saffron)] hover:text-white transition-all">
                 <Globe size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#1DA1F2] hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-[#1DA1F2] hover:text-white transition-all">
                 <MessageSquare size={18} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-[#0A66C2] hover:text-white transition-all">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-[#0A66C2] hover:text-white transition-all">
                 <Heart size={18} />
               </a>
-              <a href="mailto:hello@sevasetu.org" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white hover:text-black transition-all">
+              <a href="mailto:hello@sevasetu.org" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-white hover:text-black transition-all">
                 <Mail size={18} />
               </a>
             </div>
             <ul className="space-y-3">
-              <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="text-gray-300 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-gray-300 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
             </ul>
           </div>
         </div>

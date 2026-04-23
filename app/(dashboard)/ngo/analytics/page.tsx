@@ -24,7 +24,7 @@ export default function Page() {
                 <button 
                     key={t} 
                     onClick={() => setTimeframe(t === '7D' ? 'Last 7 Days' : t === '30D' ? 'Last 30 Days' : 'Last 90 Days')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${timeframe.includes(t) ? 'bg-[var(--saffron)] text-white shadow-md' : 'text-gray-400 hover:text-[var(--ink)]'}`}
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${timeframe.includes(t) ? 'bg-[var(--saffron)] text-white shadow-md' : 'text-gray-600 hover:text-[var(--ink)]'}`}
                 >
                     {t}
                 </button>
@@ -52,7 +52,7 @@ export default function Page() {
              </div>
              <div className="mt-4 relative z-10">
                 <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{s.val}</p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">{s.label}</p>
+                <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-1">{s.label}</p>
                 <p className="text-[10px] text-gray-300 font-medium mt-2">{s.desc}</p>
              </div>
           </div>
@@ -67,9 +67,9 @@ export default function Page() {
             <div className="flex justify-between items-center mb-10">
                 <div>
                     <h3 className="text-xl font-bold font-mukta">Volunteer Deployment Velocity</h3>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Daily Engagement Matrix • {timeframe}</p>
+                    <p className="text-xs text-gray-600 font-bold uppercase tracking-widest mt-1">Daily Engagement Matrix • {timeframe}</p>
                 </div>
-                <button onClick={() => toast.success('Downloading high-res report...')} className="p-2 hover:bg-gray-50 rounded-lg border border-[var(--border)] text-gray-400"><Download size={18} /></button>
+                <button onClick={() => toast.success('Downloading high-res report...')} className="p-2 hover:bg-gray-50 rounded-lg border border-[var(--border)] text-gray-600"><Download size={18} /></button>
             </div>
             
             <div className="flex-1 w-full relative flex flex-col">
@@ -120,13 +120,13 @@ export default function Page() {
                   
                   {/* Tooltip Simulation */}
                   <div className="absolute top-[10%] left-[62%] bg-white border border-[var(--border)] shadow-2xl p-4 rounded-2xl animate-in zoom-in slide-in-from-bottom-2 duration-300 pointer-events-none">
-                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Peak Capacity</p>
+                     <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-1">Peak Capacity</p>
                      <p className="text-lg font-bold text-[var(--saffron)] font-mukta">84 Active/hr</p>
                      <div className="h-1 w-full bg-orange-100 rounded-full mt-2 overflow-hidden"><div className="h-full bg-[var(--saffron)] w-[85%]" /></div>
                   </div>
                </div>
 
-               <div className="flex justify-between text-[10px] font-bold text-gray-400 mt-6 uppercase tracking-widest">
+               <div className="flex justify-between text-[10px] font-bold text-gray-600 mt-6 uppercase tracking-widest">
                   <span>Week 1</span>
                   <span>Week 2</span>
                   <span>Week 3</span>
@@ -150,7 +150,7 @@ export default function Page() {
                   <div key={i} className="space-y-2 group cursor-default">
                      <div className="flex justify-between items-end">
                         <p className="text-xs font-bold text-[var(--ink)] group-hover:text-[var(--saffron)] transition-colors">{sector.n}</p>
-                        <p className="text-[10px] font-bold text-gray-400">{sector.p}% Utilization</p>
+                        <p className="text-[10px] font-bold text-gray-600">{sector.p}% Utilization</p>
                      </div>
                      <div className="h-2 w-full bg-gray-50 rounded-full overflow-hidden border border-[var(--border)] p-[1px]">
                         <div 
@@ -177,13 +177,13 @@ export default function Page() {
                </svg>
                <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <p className="text-3xl font-bold text-[var(--ink)]">1,824</p>
-                  <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Total Resolved</p>
+                  <p className="text-[8px] font-bold text-gray-600 uppercase tracking-widest">Total Resolved</p>
                </div>
             </div>
             <div className="flex-1 space-y-4">
                <div>
                   <h3 className="font-bold text-lg font-mukta">Need Status Lifecycle</h3>
-                  <p className="text-xs text-gray-400 mb-6">Distribution of reports across the pipeline.</p>
+                  <p className="text-xs text-gray-600 mb-6">Distribution of reports across the pipeline.</p>
                </div>
                <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-[var(--saffron)]" /> Verified / Active</span> <span>84%</span></div>
@@ -209,11 +209,11 @@ export default function Page() {
                  <div key={i} className="px-6 py-4 flex items-center justify-between border-b last:border-0 hover:bg-gray-50 transition-colors">
                     <div>
                        <p className="text-sm font-bold text-[var(--ink)]">{d.district}</p>
-                       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Telemetry Active</p>
+                       <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest mt-0.5">Telemetry Active</p>
                     </div>
                     <div className="text-right">
                        <p className={`text-xs font-bold ${d.color}`}>{d.status}</p>
-                       <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Load: {d.load}</p>
+                       <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest mt-0.5">Load: {d.load}</p>
                     </div>
                  </div>
                ))}

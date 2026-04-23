@@ -34,7 +34,7 @@ export default function Page() {
                   <div key={i} className="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-2xl transition-all border border-transparent hover:border-[var(--border)] cursor-default">
                      <div className={`w-2 h-2 rounded-full ${e.c === 'green' ? 'bg-green-500' : e.c === 'red' ? 'bg-red-500' : e.c === 'orange' ? 'bg-orange-500' : 'bg-blue-500'}`} />
                      <div className="flex-1">
-                        <div className="flex justify-between items-center"><p className="font-bold text-sm text-[var(--ink)]">{e.t}</p><p className="text-[10px] text-gray-400 font-bold uppercase">{e.u}</p></div>
+                        <div className="flex justify-between items-center"><p className="font-bold text-sm text-[var(--ink)]">{e.t}</p><p className="text-[10px] text-gray-600 font-bold uppercase">{e.u}</p></div>
                         <p className="text-xs text-gray-500 mt-1">{e.m}</p>
                      </div>
                      <p className="text-[10px] font-bold text-gray-300 font-mono">{e.i}</p>

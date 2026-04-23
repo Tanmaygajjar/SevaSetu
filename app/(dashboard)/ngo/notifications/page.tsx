@@ -17,7 +17,6 @@ export default function NotificationsPage() {
   useEffect(() => {
     if (!user) return;
 
-    // 1. Listen to Global Broadcasts
     const broadcastQuery = query(
       collection(db, 'broadcasts'),
       where('active', '==', true),
@@ -25,7 +24,6 @@ export default function NotificationsPage() {
       limit(5)
     );
 
-    // 2. Listen to User Specific Notifications
     const notificationQuery = query(
       collection(db, 'notifications'),
       where('user_id', '==', user.id),
@@ -55,15 +53,12 @@ export default function NotificationsPage() {
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 bg-white p-8 rounded-[2.5rem] shadow-sm border border-[var(--border)] relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-1.5 h-full bg-[var(--saffron)]" />
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-600" />
         <div>
           <h1 className="text-3xl font-black font-mukta text-[var(--ink)] tracking-tight flex items-center gap-3">
-            <Bell className="text-[var(--saffron)]" /> Notifications
+            <Bell className="text-emerald-600" /> Organization Alerts
           </h1>
-          <p className="text-[var(--ink-muted)] mt-1 font-medium italic">Direct updates from SevaSetu Command and your matched causes.</p>
-        </div>
-        <div className="text-[10px] font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-widest">
-          {allItems.length} TOTAL EVENTS
+          <p className="text-[var(--ink-muted)] mt-1 font-medium italic">Command updates and volunteer coordination alerts.</p>
         </div>
       </div>
 
@@ -71,14 +66,14 @@ export default function NotificationsPage() {
         {broadcasts.length > 0 && (
           <div className="space-y-3">
              <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] px-2 flex items-center gap-2">
-                <ShieldAlert size={14} /> Priority System Broadcasts
+                <ShieldAlert size={14} /> Emergency Broadcasts
              </h2>
              {broadcasts.map((b) => (
                <div key={b.id} className="p-6 rounded-[2rem] bg-red-600 text-white shadow-xl shadow-red-900/20 relative overflow-hidden group">
                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform"><ShieldAlert size={80} /></div>
                  <div className="relative z-10">
                     <div className="flex justify-between items-center mb-3">
-                       <span className="px-2 py-0.5 bg-white/20 rounded text-[9px] font-black uppercase tracking-widest">EMERGENCY DIRECTIVE</span>
+                       <span className="px-2 py-0.5 bg-white/20 rounded text-[9px] font-black uppercase tracking-widest">COMMAND CENTER BROADCAST</span>
                        <span className="text-[10px] font-bold opacity-80">{timeAgo(b.timestamp?.toDate())}</span>
                     </div>
                     <p className="text-lg font-bold leading-tight">{b.message}</p>
@@ -89,11 +84,11 @@ export default function NotificationsPage() {
         )}
 
         <div className="space-y-3 pt-4">
-          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-2">Recent Activity</h2>
+          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] px-2">Operational Notifications</h2>
           {notifications.length === 0 && broadcasts.length === 0 && (
              <div className="p-12 text-center bg-white rounded-[2rem] border border-dashed border-slate-300">
                 <Bell className="mx-auto text-slate-300 mb-4" size={48} />
-                <p className="text-slate-500 font-bold">All clear. No new notifications.</p>
+                <p className="text-slate-500 font-bold">No active notifications.</p>
              </div>
           )}
           {notifications.map((n) => (
@@ -107,7 +102,7 @@ export default function NotificationsPage() {
                       <p className={`text-sm ${n.is_read ? 'text-slate-600' : 'font-bold text-slate-900'}`}>{n.text}</p>
                       <span className="text-[10px] font-bold text-slate-400 whitespace-nowrap ml-4">{timeAgo(n.created_at?.toDate())}</span>
                    </div>
-                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{n.type || 'SYSTEM UPDATE'}</p>
+                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{n.type || 'NGO ACTIVITY'}</p>
                 </div>
               </div>
             </div>

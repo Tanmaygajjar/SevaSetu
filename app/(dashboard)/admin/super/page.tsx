@@ -195,7 +195,7 @@ function SuperAdminContent() {
                </div>
         </div>
 
-        <div className="lg:col-span-4 h-[800px]">
+        <div className="lg:col-span-4 lg:sticky lg:top-8 h-[800px]">
            <AuditLedger />
         </div>
 

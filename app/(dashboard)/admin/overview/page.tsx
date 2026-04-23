@@ -77,7 +77,7 @@ export default function Page() {
           <div key={i} className="card p-6 hover:border-[var(--saffron)] transition-all">
              <div className="w-12 h-12 rounded-2xl bg-[var(--surface-2)] flex items-center justify-center text-[var(--ink)] mb-4"><s.i size={24} /></div>
              <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{s.v}</p>
-             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+             <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                 {s.l} <span className="text-green-500 font-bold">{s.t}</span>
              </p>
           </div>
@@ -94,7 +94,7 @@ export default function Page() {
                         <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center font-bold text-xs shadow-sm text-[var(--saffron)]">{n.name?.[0] || 'N'}</div>
                         <div>
                            <p className="font-bold text-sm">{n.name}</p>
-                           <p className="text-[10px] text-gray-400 font-bold uppercase">{n.headquarters_city || 'Regional'} • Pending Review</p>
+                           <p className="text-[10px] text-gray-600 font-bold uppercase">{n.headquarters_city || 'Regional'} • Pending Review</p>
                         </div>
                      </div>
                      <div className="flex gap-2">
@@ -104,7 +104,7 @@ export default function Page() {
                   </div>
                 ))}
                 {pendingNgos.length === 0 && (
-                  <div className="text-center py-8 text-gray-400 text-xs font-bold uppercase tracking-widest bg-gray-50 rounded-2xl border border-dashed">
+                  <div className="text-center py-8 text-gray-600 text-xs font-bold uppercase tracking-widest bg-gray-50 rounded-2xl border border-dashed">
                     No NGOs in Verification Queue
                   </div>
                 )}
@@ -114,7 +114,7 @@ export default function Page() {
          <div className="card bg-[var(--ink)] text-white p-8 overflow-hidden relative border-none">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--saffron)] opacity-20 blur-3xl rounded-full translate-x-10 -translate-y-10" />
             <h3 className="font-bold font-mukta text-xl mb-4 relative z-10">Global Integrity Score</h3>
-            <p className="text-sm text-gray-400 mb-8 relative z-10">Aggregate platform trust calculated from 82,000 verified volunteer interventions.</p>
+            <p className="text-sm text-gray-300 mb-8 relative z-10">Aggregate platform trust calculated from 82,000 verified volunteer interventions.</p>
             <div className="relative h-24 mb-10">
                 <svg className="w-full h-full" viewBox="0 0 100 20">
                     <path d="M0,20 Q10,15 20,18 T40,10 T60,15 T80,5 T100,10" fill="none" stroke="var(--saffron)" strokeWidth="1" />

@@ -125,13 +125,13 @@ export default function DataIntakePage() {
                       {headers.slice(0, 5).map(h => (
                         <td key={h} className="p-2 truncate max-w-[150px]">{row[h]}</td>
                       ))}
-                      {headers.length > 5 && <td className="p-2 text-gray-400">...</td>}
+                      {headers.length > 5 && <td className="p-2 text-gray-600">...</td>}
                     </tr>
                   ))}
                 </tbody>
               </table>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-400 flex-col gap-2">
+              <div className="h-full flex items-center justify-center text-gray-600 flex-col gap-2">
                 <AlertCircle size={32} className="opacity-20" />
                 <p>No data loaded yet</p>
               </div>

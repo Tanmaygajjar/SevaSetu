@@ -56,7 +56,7 @@ export default function LoginPage() {
             <span className="text-3xl font-bold font-mukta text-white">सेतु</span>
           </div>
           <h2 className="text-2xl font-bold font-mukta mb-4">Connecting community needs to volunteers in minutes.</h2>
-          <p className="text-gray-400 text-sm mb-8">
+          <p className="text-gray-600 text-sm mb-8">
             Join thousands of volunteers and NGOs working together to create measurable impact across India.
           </p>
           
@@ -153,7 +153,7 @@ export default function LoginPage() {
         </div>
 
         {loginMode === 'otp' ? (
-          <div className="text-center py-6 text-gray-400 bg-[var(--surface-2)] rounded-xl border border-[var(--border)]">
+          <div className="text-center py-6 text-gray-600 bg-[var(--surface-2)] rounded-xl border border-[var(--border)]">
             OTP Services disabled for local dev. Use Demo Buttons or Developer Login.
           </div>
         ) : (

@@ -27,9 +27,9 @@ function EarthGlobe() {
   const router = useRouter();
   const [hoveredCity, setHoveredCity] = useState<string | null>(null);
 
-  // Load a high-quality night earth texture from a reliable source
+  // Load realistic daylight earth textures
   const [colorMap, bumpMap] = useTexture([
-    'https://unpkg.com/three-globe/example/img/earth-night.jpg',
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
     'https://unpkg.com/three-globe/example/img/earth-topology.png'
   ]);
 
@@ -50,25 +50,25 @@ function EarthGlobe() {
     <>
       <group ref={groupRef} rotation={[0.2, -Math.PI / 2, 0]}>
         
-        {/* Main Earth Sphere with Texture */}
+        {/* Main Earth Sphere with Realistic Daylight Texture */}
         <Sphere args={[GLOBE_RADIUS, 64, 64]}>
           <meshStandardMaterial 
             map={colorMap} 
             bumpMap={bumpMap}
             bumpScale={0.05}
-            metalness={0.4}
-            roughness={0.7}
-            emissive="#FF6B35"
-            emissiveIntensity={0.1}
+            metalness={0.1}
+            roughness={0.8}
+            emissive="#ffffff"
+            emissiveIntensity={0.05}
           />
         </Sphere>
 
-        {/* Global Atmosphere Glow */}
-        <Sphere args={[GLOBE_RADIUS * 1.01, 64, 64]}>
+        {/* Subtle Realistic Atmosphere */}
+        <Sphere args={[GLOBE_RADIUS * 1.02, 64, 64]}>
           <meshPhongMaterial
-            color="#FF6B35"
+            color="#E0F2FE"
             transparent
-            opacity={0.15}
+            opacity={0.1}
             side={THREE.BackSide}
           />
         </Sphere>
@@ -114,9 +114,9 @@ export default function GlobeScene() {
   return (
     <div className="w-full h-full cursor-grab active:cursor-grabbing">
       <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[10, 10, 5]} intensity={1.5} />
-        <pointLight position={[-10, 0, -10]} intensity={0.5} color="#FF6B35" />
+        <ambientLight intensity={1} />
+        <directionalLight position={[10, 10, 5]} intensity={2} />
+        <pointLight position={[-10, 0, -10]} intensity={0.5} color="#f8fafc" />
         
         <Suspense fallback={<Html center><div className="text-[var(--saffron)] font-mukta animate-pulse">Mapping Reality...</div></Html>}>
           <ParticleField />

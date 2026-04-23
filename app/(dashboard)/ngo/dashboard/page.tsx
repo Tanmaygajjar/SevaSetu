@@ -5,8 +5,11 @@ import { db } from '@/lib/firebase/config';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { useAuthStore } from '@/stores/authStore';
 import Link from 'next/link';
-import { AlertTriangle, Clock, Columns3, CheckCircle, PlusCircle, Activity, Users, Sparkles } from 'lucide-react';
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
+import { 
+  AlertTriangle, Clock, Columns3, CheckCircle, PlusCircle, Activity, Users, Sparkles, 
+  Map as MapIcon, Zap, ArrowRight, MapPin, Building2 
+} from 'lucide-react';
 
 export default function NgoDashboard() {
   const { user } = useAuthStore();
@@ -19,11 +22,13 @@ export default function NgoDashboard() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [aiInsights, setAiInsights] = useState<{ summary: string; priorities: any[] } | null>(null);
+  const [recentIncidents, setRecentIncidents] = useState<any[]>([]);
 
   useEffect(() => {
     const needsRef = collection(db, 'needs');
     
-    const unsubscribe = onSnapshot(needsRef, async (snapshot) => {
+    // Stats Listener
+    const unsubStats = onSnapshot(needsRef, async (snapshot) => {
       const needs = snapshot.docs.map(doc => doc.data());
       setStats({
         activeNeeds: needs.filter(n => n.status === 'reported' || n.status === 'verified').length,
@@ -32,29 +37,48 @@ export default function NgoDashboard() {
         needsResolvedThisWeek: needs.filter(n => n.status === 'completed').length
       });
 
-      // AI Analysis for NGO
+      // AI Analysis
       try {
         const res = await fetch('/api/ai/ngo-insights', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ needs: needs.slice(0, 5) }) // Sample for performance
+          body: JSON.stringify({ needs: needs.slice(0, 5) })
         });
         const data = await res.json();
         setAiInsights(data);
       } catch (err) {
         console.error('AI Insights failed', err);
       }
+    });
 
+    // Operations Feed Listener
+    const unsubFeed = onSnapshot(needsRef, (snapshot) => {
+      const demoIncidents = [
+        { id: 'n1', title: 'Medical Supply Shortage', description: 'Immediate need for insulin and basic bandages in Mavdi area.', urgency_score: 9, status: 'reported' },
+        { id: 'n2', title: 'Water Tanker Required', description: 'Bhakti Nagar community reporting zero water supply for 48 hours.', urgency_score: 7, status: 'verified' },
+        { id: 'n3', title: 'Elderly Care Assistance', description: '3 seniors needing help with grocery and medicine delivery.', urgency_score: 5, status: 'in_progress' }
+      ];
+
+      const dbIncidents = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        .slice(0, 4);
+
+      setRecentIncidents(dbIncidents.length > 0 ? dbIncidents : demoIncidents);
       setIsLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubStats();
+      unsubFeed();
+    };
   }, []);
 
   if (isLoading) return <LoadingSkeleton type="page" />;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 fade-in">
+      {/* ... AI Insights Section (already correct) ... */}
       {aiInsights && (
         <div className="bg-gradient-to-r from-[var(--ink)] to-slate-800 text-white p-6 rounded-2xl border border-slate-700 shadow-xl animate-in fade-in slide-in-from-top duration-700 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-20"><Sparkles size={40} /></div>
@@ -66,17 +90,18 @@ export default function NgoDashboard() {
             {aiInsights.priorities?.map((p, i) => (
               <div key={i} className="bg-white/5 border border-white/10 p-3 rounded-xl hover:bg-white/10 transition-colors">
                 <p className="text-xs font-bold text-[var(--saffron)] mb-1 line-clamp-1">{p.title}</p>
-                <p className="text-[10px] text-gray-400 line-clamp-2">{p.reason}</p>
+                <p className="text-[10px] text-gray-300 line-clamp-2">{p.reason}</p>
               </div>
             ))}
           </div>
         </div>
       )}
 
+      {/* Command Center Header */}
       <div className="flex justify-between items-center bg-white p-6 rounded-2xl border border-[var(--border)] shadow-sm">
         <div>
-          <h1 className="text-3xl font-bold font-mukta mb-1 text-[var(--ink)]">Command Center</h1>
-          <p className="text-[var(--ink-muted)]">Disha Foundation • Central Rajkot</p>
+          <h1 className="text-3xl font-bold font-mukta mb-1 text-[var(--ink)]">NGO Command Center</h1>
+          <p className="text-[var(--ink-muted)] font-medium">Disha Foundation • Central Rajkot Node</p>
         </div>
         <Link href="/ngo/needs/new" className="btn-primary shadow-lg shadow-[var(--saffron-glow)] hidden sm:flex">
           <PlusCircle size={18} />
@@ -84,13 +109,15 @@ export default function NgoDashboard() {
         </Link>
       </div>
 
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card bg-white hover:border-[var(--saffron)] transition-colors cursor-pointer group">
+         {/* ... Stats Cards (keep existing) ... */}
+         <div className="card bg-white hover:border-[var(--saffron)] transition-colors cursor-pointer group">
           <div className="flex justify-between items-start mb-4">
             <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
               <AlertTriangle size={20} />
             </div>
-            <span className="text-xs font-bold text-red-600 px-2 py-1 bg-red-50 rounded">Needs Action</span>
+            <span className="text-xs font-bold text-red-600 px-2 py-1 bg-red-50 rounded">Action</span>
           </div>
           <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{stats?.activeNeeds}</p>
           <p className="text-sm text-[var(--ink-muted)] font-medium">Active Needs</p>
@@ -103,7 +130,7 @@ export default function NgoDashboard() {
             </div>
           </div>
           <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{stats?.pendingVerification}</p>
-          <p className="text-sm text-[var(--ink-muted)] font-medium">Pending Verification</p>
+          <p className="text-sm text-[var(--ink-muted)] font-medium">Pending Verify</p>
         </div>
         
         <div className="card bg-white hover:border-blue-500 transition-colors cursor-pointer group">
@@ -114,7 +141,7 @@ export default function NgoDashboard() {
             <span className="text-xs font-bold text-blue-600 px-2 py-1 bg-blue-50 rounded">Live</span>
           </div>
           <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{stats?.volunteersDeployed}</p>
-          <p className="text-sm text-[var(--ink-muted)] font-medium">Volunteers Deployed</p>
+          <p className="text-sm text-[var(--ink-muted)] font-medium">Volunteers</p>
         </div>
 
         <div className="card bg-white hover:border-green-500 transition-colors cursor-pointer group">
@@ -124,22 +151,96 @@ export default function NgoDashboard() {
             </div>
           </div>
           <p className="text-3xl font-bold font-mukta text-[var(--ink)]">{stats?.needsResolvedThisWeek}</p>
-          <p className="text-sm text-[var(--ink-muted)] font-medium">Resolved This Week</p>
+          <p className="text-sm text-[var(--ink-muted)] font-medium">Resolved</p>
         </div>
       </div>
 
+      {/* NEW: Heatmap and Operations Feed Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         <div className="lg:col-span-2 space-y-8">
+            <div className="card p-0 bg-white relative overflow-hidden group shadow-xl border-[var(--border)] rounded-[2.5rem]">
+               <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-white/50 backdrop-blur-sm relative z-20">
+                  <div>
+                    <h3 className="font-black font-mukta text-2xl uppercase tracking-tight flex items-center gap-2 text-[var(--ink)]">
+                      <MapIcon size={24} className="text-blue-600" /> Strategic Heatmap
+                    </h3>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Real-time Need Clusters</p>
+                  </div>
+               </div>
+
+               <div className="h-[350px] bg-[#F8FAFC] relative overflow-hidden">
+                  <svg className="absolute inset-0 w-full h-full opacity-60" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice">
+                     <path d="M50,150 C100,50 300,30 450,80 C600,120 750,80 750,250 C750,400 600,450 400,420 C200,380 50,450 50,300 Z" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="2" />
+                  </svg>
+                  
+                  <div className="absolute inset-0 z-10">
+                     {recentIncidents.map((incident, idx) => {
+                        const x = (incident.id.charCodeAt(0) * 17) % 60 + 20;
+                        const y = (incident.id.charCodeAt(1) * 9) % 50 + 25;
+                        const isHighUrgency = incident.urgency_score >= 8;
+                        
+                        return (
+                           <div key={incident.id} className="absolute" style={{ left: `${x}%`, top: `${y}%` }}>
+                              <div className={`w-24 h-24 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-2xl ${isHighUrgency ? 'bg-orange-500' : 'bg-blue-400'}`} />
+                              <div className="relative group/spot">
+                                 <div className={`w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-lg ${isHighUrgency ? 'bg-orange-600 animate-pulse' : 'bg-blue-500'}`} />
+                                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-hover/spot:opacity-100 transition-all bg-white p-3 rounded-xl shadow-2xl border border-gray-100 w-48 z-50 pointer-events-none">
+                                    <p className="text-[9px] font-black text-blue-600 uppercase mb-1">Incident Report</p>
+                                    <p className="text-xs font-bold text-[var(--ink)] line-clamp-1">{incident.title}</p>
+                                    <p className="text-[10px] text-gray-500 line-clamp-2">{incident.description}</p>
+                                 </div>
+                              </div>
+                           </div>
+                        );
+                     })}
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div className="space-y-6">
+            <h3 className="font-bold font-mukta text-xl flex items-center gap-2">
+               <Activity size={20} className="text-blue-600" /> Operations Feed
+            </h3>
+            <div className="space-y-4">
+               {recentIncidents.map((f) => (
+                  <div key={f.id} className="card p-5 bg-white border-[var(--border)] hover:border-[var(--saffron)] transition-all cursor-pointer group">
+                     <div className="flex justify-between items-start mb-2">
+                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                          f.urgency_score >= 8 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'
+                        }`}>
+                           Priority {f.urgency_score}
+                        </span>
+                        <Clock size={12} className="text-gray-300" />
+                     </div>
+                     <p className="text-sm font-bold text-[var(--ink)] mb-1 group-hover:text-[var(--saffron)] transition-colors">{f.title}</p>
+                     <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{f.description}</p>
+                     <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center text-[10px] font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>ASSIGN VOLUNTEER</span>
+                        <ArrowRight size={12} />
+                     </div>
+                  </div>
+               ))}
+               <button className="w-full py-4 bg-gray-50 text-[10px] font-black text-gray-400 rounded-2xl uppercase tracking-widest border border-dashed border-gray-200 hover:bg-gray-100 transition-colors">
+                  Load Full Operation Logs
+               </button>
+            </div>
+         </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="card border-[var(--border)] relative overflow-hidden group hover:border-[var(--saffron)] transition-colors">
+         {/* ... Existing Task/Intake Cards (keep them) ... */}
+         <div className="card border-[var(--border)] relative overflow-hidden group hover:border-[var(--saffron)] transition-colors">
           <div className="absolute right-0 top-0 w-32 h-32 bg-[var(--saffron)] opacity-5 rounded-bl-full group-hover:scale-110 transition-transform" />
           <h2 className="text-xl font-bold font-mukta mb-2"><Columns3 className="inline mr-2 text-[var(--saffron)]" /> Task Board</h2>
-          <p className="text-[var(--ink-muted)] mb-6">Manage volunteer assignments, track progress, and close resolved needs via Kanban interface.</p>
+          <p className="text-[var(--ink-muted)] mb-6">Manage volunteer assignments and track resolution progress.</p>
           <Link href="/ngo/tasks" className="btn-primary w-full justify-center">Open Task Board</Link>
         </div>
 
         <div className="card border-[var(--border)] relative overflow-hidden group hover:border-teal-500 transition-colors">
           <div className="absolute right-0 top-0 w-32 h-32 bg-teal-500 opacity-5 rounded-bl-full group-hover:scale-110 transition-transform" />
           <h2 className="text-xl font-bold font-mukta mb-2"><Activity className="inline mr-2 text-teal-600" /> Data Intake API</h2>
-          <p className="text-[var(--ink-muted)] mb-6">Connect your existing CRM systems or upload bulk CSVs of beneficiary needs via our API.</p>
+          <p className="text-[var(--ink-muted)] mb-6">Sync CRM systems or upload bulk CSVs of community needs.</p>
           <Link href="/ngo/data-intake" className="btn-ghost border border-[var(--border)] w-full justify-center hover:border-teal-500 hover:text-teal-700">Manage Intake</Link>
         </div>
       </div>

@@ -34,8 +34,8 @@ export default function Page() {
           <p className="text-[var(--ink-muted)] mt-1 font-medium">Verify contributions, audit SDG impacts, and generate certified reports.</p>
         </div>
         <div className="flex bg-white border border-[var(--border)] rounded-2xl p-1 shadow-sm">
-           <button onClick={() => setActiveTab('generate')} className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'generate' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-400 hover:text-[var(--ink)]'}`}>Builder</button>
-           <button onClick={() => setActiveTab('history')} className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-400 hover:text-[var(--ink)]'}`}>Vault History</button>
+           <button onClick={() => setActiveTab('generate')} className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'generate' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:text-[var(--ink)]'}`}>Builder</button>
+           <button onClick={() => setActiveTab('history')} className={`px-6 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-lg' : 'text-gray-600 hover:text-[var(--ink)]'}`}>Vault History</button>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function Page() {
                         onClick={() => setSelectedTemplate(t.id)}
                         className={`p-6 rounded-2xl border-2 cursor-pointer transition-all hover:shadow-xl ${selectedTemplate === t.id ? t.color : 'bg-white border-[var(--border)] opacity-60 hover:opacity-100'}`}
                        >
-                          <div className={`w-8 h-8 rounded-lg mb-4 flex items-center justify-center ${selectedTemplate === t.id ? 'bg-white text-indigo-600 shadow-sm' : 'bg-gray-100 text-gray-400'}`}><FileText size={18} /></div>
+                          <div className={`w-8 h-8 rounded-lg mb-4 flex items-center justify-center ${selectedTemplate === t.id ? 'bg-white text-indigo-600 shadow-sm' : 'bg-gray-100 text-gray-600'}`}><FileText size={18} /></div>
                           <h4 className="font-bold text-sm mb-2">{t.title}</h4>
                           <p className="text-[10px] text-gray-500 leading-relaxed">{t.desc}</p>
                        </div>
@@ -65,8 +65,8 @@ export default function Page() {
                  <h3 className="text-lg font-bold font-mukta flex items-center gap-2 text-indigo-600"><ShieldCheck size={20} /> 2. Audit Parameters</h3>
                  <div className="card p-8 bg-white space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                       <div><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Date Range</label><input type="date" className="input bg-gray-50 border-gray-100" defaultValue="2025-07-01" /></div>
-                       <div><label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Region Scope</label><select className="input bg-gray-50 border-gray-100 font-bold text-sm"><option>Whole District (Rajkot)</option><option>West Zone Only</option><option>State Level</option></select></div>
+                       <div><label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2 block">Date Range</label><input type="date" className="input bg-gray-50 border-gray-100" defaultValue="2025-07-01" /></div>
+                       <div><label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2 block">Region Scope</label><select className="input bg-gray-50 border-gray-100 font-bold text-sm"><option>Whole District (Rajkot)</option><option>West Zone Only</option><option>State Level</option></select></div>
                     </div>
                     <div className="flex items-center justify-between p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
                        <div className="flex items-center gap-3">
@@ -137,10 +137,10 @@ export default function Page() {
         <div className="space-y-6">
            <div className="flex gap-4 items-center mb-10">
               <div className="relative flex-1">
-                 <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                 <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" />
                  <input type="text" placeholder="Search report library..." className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-[var(--border)] outline-none" />
               </div>
-              <button className="p-3 bg-white rounded-2xl border border-[var(--border)]"><Filter size={20} className="text-gray-400" /></button>
+              <button className="p-3 bg-white rounded-2xl border border-[var(--border)]"><Filter size={20} className="text-gray-600" /></button>
            </div>
 
            <div className="grid grid-cols-1 gap-4">
@@ -150,7 +150,7 @@ export default function Page() {
                        <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform"><FileText size={28} /></div>
                        <div>
                           <h3 className="font-bold text-lg text-[var(--ink)]">{r.name}</h3>
-                          <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                          <div className="flex items-center gap-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-1">
                              <span className="flex items-center gap-1"><Calendar size={12} /> {r.date}</span>
                              <span>•</span>
                              <span>{r.size}</span>
@@ -160,9 +160,9 @@ export default function Page() {
                        </div>
                     </div>
                     <div className="flex gap-3">
-                       <button onClick={() => toast.success('Opening shareable secure link...')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 transition-colors"><Share2 size={16} /></button>
-                       <button onClick={() => toast.success('Report downloaded from vault.')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-600 transition-colors"><FileDown size={16} /></button>
-                       <button onClick={() => toast.error('Reports cannot be deleted for 5 years per compliance.')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
+                       <button onClick={() => toast.success('Opening shareable secure link...')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors"><Share2 size={16} /></button>
+                       <button onClick={() => toast.success('Report downloaded from vault.')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 hover:text-indigo-600 transition-colors"><FileDown size={16} /></button>
+                       <button onClick={() => toast.error('Reports cannot be deleted for 5 years per compliance.')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
                     </div>
                  </div>
               ))}
@@ -181,7 +181,7 @@ export default function Page() {
                     <div className="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg"><FileText size={24} /></div>
                     <div>
                        <h2 className="text-xl font-bold font-mukta">Impact_Preview_v2.0.pdf</h2>
-                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2 mt-1">
+                       <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2 mt-1">
                           <CheckCircle2 size={12} className="text-green-500" /> SECURE AUDIT MODE • NOT YET SIGNED
                        </p>
                     </div>
@@ -195,7 +195,7 @@ export default function Page() {
                     <div className="flex justify-between border-b-8 border-indigo-600 pb-8 items-end">
                        <div className="space-y-1">
                           <h1 className="text-5xl font-black font-mukta text-indigo-700 leading-none">IMPACT<br/>AUDIT</h1>
-                          <p className="text-[9px] font-bold text-gray-400 uppercase tracking-[6px]">SEVASETU PROTOCOL</p>
+                          <p className="text-[9px] font-bold text-gray-600 uppercase tracking-[6px]">SEVASETU PROTOCOL</p>
                        </div>
                        <div className="text-right">
                           <p className="text-3xl font-black text-gray-800">2025</p>
@@ -217,7 +217,7 @@ export default function Page() {
                           <div className="space-y-3">
                              <div className="flex justify-between items-end"><p className="text-xs font-bold">Fulfillment</p><p className="text-xl font-bold text-indigo-600">92%</p></div>
                              <div className="h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-600 w-[92%]" /></div>
-                             <p className="text-[8px] text-gray-400 leading-tight">Calculated across 4,102 verified individual human volunteer interventions in the Rajkot district sector.</p>
+                             <p className="text-[8px] text-gray-600 leading-tight">Calculated across 4,102 verified individual human volunteer interventions in the Rajkot district sector.</p>
                           </div>
                        </section>
                     </div>
@@ -241,10 +241,10 @@ export default function Page() {
               <div className="p-8 border-t bg-white flex flex-col md:flex-row justify-between items-center gap-6 relative z-10 shadow-[0_-10px_50px_rgba(0,0,0,0.05)]">
                  <div className="flex items-center gap-3">
                     <ShieldCheck size={24} className="text-indigo-600" />
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[2px]">Verification Pending • Blockchain Signature Ready</div>
+                    <div className="text-[10px] font-bold text-gray-600 uppercase tracking-[2px]">Verification Pending • Blockchain Signature Ready</div>
                  </div>
                  <div className="flex gap-4 w-full md:w-auto">
-                    <button onClick={() => setIsPreviewOpen(false)} className="flex-1 md:flex-none px-10 py-4 text-sm font-bold text-gray-400 hover:bg-gray-100 rounded-2xl transition-colors">Discard</button>
+                    <button onClick={() => setIsPreviewOpen(false)} className="flex-1 md:flex-none px-10 py-4 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-2xl transition-colors">Discard</button>
                     <button 
                        onClick={() => { setIsPreviewOpen(false); toast.success('Report successfully signed & exported!'); }}
                        className="flex-1 md:flex-none px-12 py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-2xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"

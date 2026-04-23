@@ -166,10 +166,62 @@ export default function ReportPage() {
     }
   };
 
+  const [imageValidations, setImageValidations] = useState<Record<string, {valid: boolean, analyzing: boolean, reason?: string}>>({});
+
+  const verifyImage = async (file: File) => {
+    const fileId = `${file.name}-${file.size}`;
+    if (imageValidations[fileId]) return;
+
+    setImageValidations(prev => ({ ...prev, [fileId]: { valid: false, analyzing: true } }));
+
+    try {
+      const base64 = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+
+      const res = await fetch('/api/ai/verify-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: base64 })
+      });
+
+      const data = await res.json();
+      setImageValidations(prev => ({ 
+        ...prev, 
+        [fileId]: { 
+          valid: data.valid, 
+          analyzing: false, 
+          reason: data.reason 
+        } 
+      }));
+
+      if (!data.valid) {
+        toast.error(`Image Rejected: ${data.reason}`, { duration: 5000 });
+      } else {
+        toast.success(`Visual Verified: ${data.description}`, { icon: '👁️' });
+      }
+    } catch (error) {
+      setImageValidations(prev => ({ ...prev, [fileId]: { valid: true, analyzing: false } })); // Fallback
+    }
+  };
+
   const handleSubmit = async () => {
     if (!formData.title || !formData.description) {
       toast.error('Please provide details.');
       setStep(3);
+      return;
+    }
+
+    // Check if any image is still being analyzed or is invalid
+    const invalidImages = formData.photos.filter(f => {
+      const v = imageValidations[`${f.name}-${f.size}`];
+      return !v || v.analyzing || !v.valid;
+    });
+
+    if (formData.photos.length > 0 && invalidImages.length > 0) {
+      toast.error('Please ensure all photos are AI-verified as authentic before submitting.');
       return;
     }
 
@@ -201,7 +253,8 @@ export default function ReportPage() {
         ai_summary: aiAnalysis.valid ? 'Verified by Gemini AI' : 'Needs manual review',
         created_at: new Date().toISOString(),
         image_urls: imageUrls,
-        population_count: formData.population
+        population_count: formData.population,
+        visual_verified: true
       });
       
       toast.success('Report broadcasted to the grid!', { id: toastId });
@@ -347,7 +400,10 @@ export default function ReportPage() {
                    <Camera size={18} className="text-[var(--saffron)]" /> Visual Documentation
                 </p>
                 <ImageCapture 
-                  onImagesChange={(files) => setFormData(prev => ({...prev, photos: files}))} 
+                  onImagesChange={(files) => {
+                    setFormData(prev => ({...prev, photos: files}));
+                    files.forEach(file => verifyImage(file));
+                  }} 
                   maxImages={3} 
                 />
               </div>

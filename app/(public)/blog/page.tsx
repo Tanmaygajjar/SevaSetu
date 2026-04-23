@@ -56,7 +56,7 @@ export default function BlogPage() {
               </div>
               
               <div className="p-6 flex-1 flex flex-col">
-                <div className="flex items-center gap-4 text-xs text-gray-400 mb-4 font-bold uppercase tracking-widest">
+                <div className="flex items-center gap-4 text-xs text-gray-600 mb-4 font-bold uppercase tracking-widest">
                   <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                   <span className="flex items-center gap-1"><Clock size={12} /> {post.readTime}</span>
                 </div>

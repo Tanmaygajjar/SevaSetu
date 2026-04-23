@@ -73,7 +73,7 @@ export default function NgosPage() {
         {/* Search & Filter Bar */}
         <div className="flex flex-col md:flex-row gap-4 mb-10">
           <div className="relative flex-1">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600">
               <Search size={20} />
             </span>
             <input 
@@ -111,7 +111,7 @@ export default function NgosPage() {
                 {ngo.name}
               </h3>
               <div className="flex items-center gap-2 text-sm text-[var(--ink-muted)] mb-3">
-                <MapPin size={14} className="text-gray-400" />
+                <MapPin size={14} className="text-gray-600" />
                 {ngo.location}
               </div>
 
@@ -121,7 +121,7 @@ export default function NgosPage() {
 
               <div className="pt-6 border-t border-[var(--border)] flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold mb-0.5">Impact</span>
+                  <span className="text-[10px] uppercase tracking-widest text-gray-600 font-bold mb-0.5">Impact</span>
                   <span className="text-sm font-bold text-[var(--ink)]">{ngo.impact}</span>
                 </div>
                 <div className="flex gap-2">
@@ -142,7 +142,7 @@ export default function NgosPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--saffron)] opacity-10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           <div className="relative z-10 text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold font-mukta mb-4 text-white">Are you an NGO working for change?</h2>
-            <p className="text-gray-400 mb-8 px-4">
+            <p className="text-gray-300 mb-8 px-4">
               Join the SevaSetu network to find verified volunteers, access disaster mode alerts, and digitize your impact reports.
             </p>
             <div className="flex justify-center gap-4">

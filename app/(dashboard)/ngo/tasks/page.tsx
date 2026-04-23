@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { Need } from '@/types';
-import { AlertCircle, Clock, CheckCircle2, UserPlus, MoreVertical, X, Check } from 'lucide-react';
+import { AlertCircle, Clock, CheckCircle2, UserPlus, MoreVertical, X, Check, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 type Column = 'reported' | 'verified' | 'in_progress' | 'completed';
@@ -104,6 +104,28 @@ export default function NgoTasks() {
     setDraggedNeed(null);
   };
 
+  const deleteTask = async (id: string) => {
+    if (!window.confirm('SYSTEM ALERT: This will permanently delete this record from the entire platform database. Continue?')) return;
+    
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        if (!id.startsWith('kn-')) {
+          await deleteDoc(doc(db, 'needs', id));
+        }
+        setLocalNeeds(prev => prev.filter(n => n.id !== id));
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    toast.promise(promise, {
+      loading: 'Purging record...',
+      success: 'Task deleted permanently.',
+      error: 'Deletion failed.'
+    });
+  };
+
   const assignVolunteer = async (volunteerId: string) => {
     if (!selectedNeedForAssign) return;
     
@@ -184,12 +206,21 @@ export default function NgoTasks() {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-faint)] bg-[var(--surface-2)] px-2 py-0.5 rounded">
                         {need.category}
                       </span>
-                      <button 
-                        onClick={() => setSelectedNeedForAssign(need)}
-                        className="text-[var(--saffron)] hover:bg-[var(--saffron-light)] p-1 rounded-md transition-colors opacity-0 group-hover:opacity-100 flex items-center gap-1 text-[10px] font-bold"
-                      >
-                        <UserPlus size={14} /> ASSIGN
-                      </button>
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => setSelectedNeedForAssign(need)}
+                          className="text-[var(--saffron)] hover:bg-[var(--saffron-light)] p-1 rounded-md transition-colors flex items-center gap-1 text-[10px] font-bold"
+                        >
+                          <UserPlus size={14} /> ASSIGN
+                        </button>
+                        <button 
+                          onClick={() => deleteTask(need.id)}
+                          className="text-red-500 hover:bg-red-50 p-1 rounded-md transition-colors"
+                          title="Delete Task"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
 
                     {selectedNeedForAssign?.id === need.id && (

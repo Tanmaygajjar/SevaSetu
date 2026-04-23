@@ -53,7 +53,7 @@ export default function Page() {
         </div>
         <div className="flex gap-4">
            <div className="relative w-64">
-              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
               <input type="text" placeholder="Search registry..." className="input pl-10" />
            </div>
            <button onClick={() => toast.success('Filtering by sector...')} className="p-3 bg-white border border-[var(--border)] rounded-xl hover:bg-gray-50 transition-colors"><Filter size={20} /></button>
@@ -69,11 +69,11 @@ export default function Page() {
                   <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${n.s === 'Verified' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-orange-50 text-orange-700 border-orange-100'}`}>{n.s}</span>
                </div>
                <h3 className="text-xl font-bold font-mukta mb-2 group-hover:text-blue-600 transition-colors leading-tight">{n.name}</h3>
-               <p className="border-l-2 border-blue-600 pl-3 text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">{n.type}</p>
+               <p className="border-l-2 border-blue-600 pl-3 text-xs font-bold text-gray-600 uppercase tracking-widest mb-6">{n.type}</p>
                
                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100"><p className="text-lg font-bold text-[var(--ink)]">{n.h}</p><p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Impact Score</p></div>
-                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100"><p className="text-lg font-bold text-blue-600">{n.d.split(' ')[2]}</p><p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Sector Zone</p></div>
+                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100"><p className="text-lg font-bold text-[var(--ink)]">{n.h}</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-wider">Impact Score</p></div>
+                  <div className="p-3 bg-gray-50 rounded-xl border border-gray-100"><p className="text-lg font-bold text-blue-600">{n.d.split(' ')[2]}</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-wider">Sector Zone</p></div>
                </div>
 
                <div className="flex gap-2">
@@ -98,11 +98,11 @@ export default function Page() {
                  
                  <div className="w-full space-y-3">
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-50">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Impact Score</p>
+                        <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-1">Impact Score</p>
                         <p className="text-2xl font-bold text-blue-600">{selectedNgo.h}</p>
                     </div>
                     <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-50">
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Last Audit</p>
+                        <p className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-1">Last Audit</p>
                         <p className="text-sm font-bold text-green-600">{selectedNgo.audits}</p>
                     </div>
                  </div>
@@ -114,23 +114,23 @@ export default function Page() {
                  
                  <div className="space-y-6">
                     <section>
-                        <h4 className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3"><FileText size={14} /> Institutional Bio</h4>
+                        <h4 className="flex items-center gap-2 text-xs font-bold text-gray-600 uppercase tracking-widest mb-3"><FileText size={14} /> Institutional Bio</h4>
                         <p className="text-sm text-[var(--ink-muted)] leading-relaxed italic">"{selectedNgo.bio}"</p>
                     </section>
 
                     <section className="grid grid-cols-2 gap-4">
                         <div className="space-y-1 p-4 bg-gray-50 rounded-2xl">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1"><ShieldCheck size={10} /> Reg Number</h4>
+                            <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-1"><ShieldCheck size={10} /> Reg Number</h4>
                             <p className="text-xs font-bold text-blue-900">{selectedNgo.reg}</p>
                         </div>
                         <div className="space-y-1 p-4 bg-gray-50 rounded-2xl">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1"><Globe size={10} /> Compliance</h4>
+                            <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-1"><Globe size={10} /> Compliance</h4>
                             <p className="text-xs font-bold text-green-600">STATE VERIFIED</p>
                         </div>
                     </section>
 
                     <section>
-                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Operating Sectors</h4>
+                        <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Operating Sectors</h4>
                         <div className="flex flex-wrap gap-2">
                             {selectedNgo.sectors.map(s => (
                                 <span key={s} className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-[10px] font-bold border border-blue-100 flex items-center gap-1.5 underline-offset-4 decoration-2">

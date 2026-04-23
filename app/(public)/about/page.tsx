@@ -14,7 +14,7 @@ export default function AboutPage() {
           <h1 className="text-5xl md:text-7xl font-bold font-mukta mb-8 leading-tight">
             Building the digital bridge for civic impact.
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 font-light leading-relaxed mb-4">
+          <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-4">
             During disasters, the gap between a community's need and a volunteer's readiness isn't a lack of willingness—it's a lack of connection. 
           </p>
           <p className="text-xl md:text-2xl text-[var(--saffron)] font-bold">

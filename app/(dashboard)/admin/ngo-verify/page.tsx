@@ -51,7 +51,7 @@ export default function Page() {
       
       <div className="mt-6 space-y-4">
         {loading ? (
-          <div className="text-center py-20 animate-pulse text-gray-400">Loading verification queue...</div>
+          <div className="text-center py-20 animate-pulse text-gray-600">Loading verification queue...</div>
         ) : ngos.map((n) => (
           <div 
             key={n.id} 
@@ -67,7 +67,7 @@ export default function Page() {
                   <p className="text-[10px] font-bold text-blue-600 flex items-center gap-1 uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded">
                     <FileText size={10} /> {n.registration_no || 'REG-PENDING'}
                   </p>
-                  <p className="text-[10px] font-bold text-gray-400 flex items-center gap-1 uppercase tracking-widest">
+                  <p className="text-[10px] font-bold text-gray-600 flex items-center gap-1 uppercase tracking-widest">
                     <AlertCircle size={10} /> Applied: {n.created_at ? new Date(n.created_at).toLocaleDateString() : 'Recent'}
                   </p>
                 </div>
@@ -94,8 +94,8 @@ export default function Page() {
         {!loading && ngos.length === 0 && (
           <div className="bg-[var(--surface-2)] rounded-3xl border-2 border-dashed border-[var(--border)] p-20 text-center">
             <Shield className="mx-auto text-gray-300 mb-4" size={48} />
-            <p className="text-xl font-bold font-mukta text-gray-400">All NGOs Verified</p>
-            <p className="text-sm text-gray-400 mt-2">The verification queue is currently empty.</p>
+            <p className="text-xl font-bold font-mukta text-gray-600">All NGOs Verified</p>
+            <p className="text-sm text-gray-600 mt-2">The verification queue is currently empty.</p>
           </div>
         )}
       </div>

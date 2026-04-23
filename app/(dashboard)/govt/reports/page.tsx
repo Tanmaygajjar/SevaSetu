@@ -19,8 +19,8 @@ export default function Page() {
       </div>
 
       <div className="flex gap-4 mb-6">
-         <div className="relative flex-1"><Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" /><input type="text" placeholder="Search gazette ID or keyword..." className="input pl-12 bg-white" /></div>
-         <button className="p-3 bg-white border border-[var(--border)] rounded-xl hover:bg-gray-50 transition-colors"><Filter size={20} className="text-gray-400" /></button>
+         <div className="relative flex-1"><Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" /><input type="text" placeholder="Search gazette ID or keyword..." className="input pl-12 bg-white" /></div>
+         <button className="p-3 bg-white border border-[var(--border)] rounded-xl hover:bg-gray-50 transition-colors"><Filter size={20} className="text-gray-600" /></button>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
@@ -30,7 +30,7 @@ export default function Page() {
                   <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm"><FileText size={28} /></div>
                   <div>
                      <h3 className="font-bold text-lg text-[var(--ink)]">{r.title}</h3>
-                     <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
+                     <div className="flex items-center gap-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-1">
                         <span className="flex items-center gap-1"><Calendar size={12} /> {r.date}</span>
                         <span>•</span>
                         <span>{r.size}</span>
@@ -40,7 +40,7 @@ export default function Page() {
                   </div>
                </div>
                <div className="flex gap-2">
-                  <button onClick={() => toast.success('Opening secure viewer...')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 transition-colors border border-[var(--border)]"><FileText size={18} /></button>
+                  <button onClick={() => toast.success('Opening secure viewer...')} className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-600 hover:text-blue-600 transition-colors border border-[var(--border)]"><FileText size={18} /></button>
                   <button onClick={() => toast.success('Report downloaded and logged')} className="px-6 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-blue-700 transition-all flex items-center gap-2"><FileDown size={16} /> Official PDF</button>
                </div>
             </div>

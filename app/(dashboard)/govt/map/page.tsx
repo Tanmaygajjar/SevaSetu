@@ -10,12 +10,12 @@ export default function Page() {
          <div className="p-6 border-b">
             <h2 className="text-xl font-bold font-mukta text-[var(--ink)] mb-4">GIS Surveillance</h2>
             <div className="relative">
-               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
                <input type="text" placeholder="Search ward or site..." className="input pl-10 text-xs" />
             </div>
          </div>
          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Live Heat Signature</p>
+            <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2">Live Heat Signature</p>
             {[
               { n: 'Mavdi Market Area', l: 'Critical', c: 'text-red-500' },
               { n: 'Rajkot Bus Port', l: 'High Active', c: 'text-orange-500' },
@@ -24,7 +24,7 @@ export default function Page() {
             ].map((s, i) => (
               <div key={i} className="p-4 bg-[var(--surface-2)] rounded-xl border border-[var(--border)] hover:border-blue-600 transition-all cursor-pointer">
                  <div className="flex justify-between items-center mb-1"><p className="font-bold text-sm">{s.n}</p><span className={`text-[9px] font-bold uppercase ${s.c}`}>{s.l}</span></div>
-                 <p className="text-[10px] text-gray-400">Last heartbeat: 42 seconds ago</p>
+                 <p className="text-[10px] text-gray-600">Last heartbeat: 42 seconds ago</p>
               </div>
             ))}
          </div>

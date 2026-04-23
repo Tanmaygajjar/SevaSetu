@@ -16,7 +16,7 @@ export default function Page() {
                    <div><p className="font-bold text-sm">Force Critical-Only Dispatch</p><p className="text-[10px] text-gray-500">Auto-assign volunteers only when Urgency Score &gt; 8.5</p></div>
                    <div className="w-12 h-6 bg-[var(--saffron)] rounded-full relative"><div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" /></div>
                 </div>
-                <div><label className="label">Monthly NGO Report Quota</label><input type="range" className="w-full accent-[var(--saffron)]" defaultValue="80" /><div className="flex justify-between text-[10px] text-gray-400 font-bold mt-2"><span>10 reports</span><span>UPPER LIMIT: 500 reports</span></div></div>
+                <div><label className="label">Monthly NGO Report Quota</label><input type="range" className="w-full accent-[var(--saffron)]" defaultValue="80" /><div className="flex justify-between text-[10px] text-gray-600 font-bold mt-2"><span>10 reports</span><span>UPPER LIMIT: 500 reports</span></div></div>
             </div>
          </section>
 
@@ -33,7 +33,7 @@ export default function Page() {
       </div>
 
       <div className="flex justify-end items-center gap-4 pt-10 border-t">
-         <button className="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors">Emergency System Reset</button>
+         <button className="text-xs font-bold text-gray-600 hover:text-red-500 transition-colors">Emergency System Reset</button>
          <button onClick={() => toast.success('Platform rules updated globally!')} className="px-10 py-4 bg-[var(--ink)] text-white rounded-2xl font-bold shadow-2xl flex items-center gap-2"><Save size={18} /> Deploy Changes</button>
       </div>
     </div>

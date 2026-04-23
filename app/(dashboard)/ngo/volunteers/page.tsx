@@ -1,45 +1,96 @@
 'use client';
-import React, { useState } from 'react';
-import { Search, MapPin, Star, UserCheck, MessageSquare, Phone, Mail, Award, Clock, X, Shield, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Search, MapPin, Star, UserCheck, MessageSquare, Phone, Mail, Award, Clock, X, Shield, Calendar, Sparkles, Brain } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { db } from '@/lib/firebase/config';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
+import { timeAgo } from '@/lib/utils';
 
 export default function Page() {
-  const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [selectedVolunteer, setSelectedVolunteer] = useState<any>(null);
+  const [volunteers, setVolunteers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [aiScout, setAiScout] = useState<any>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
 
-  const volunteers = [
-    { 
-        id: 11, name: 'Arjun Mehta', hours: 142, rating: 4.9, 
-        skills: ['First Aid', 'Logistics', 'Heavy Driving'], status: 'Active',
-        phone: '+91 98765 43210', email: 'arjun.m@example.com',
-        bio: 'Dedicated field volunteer with 3 years of experience in disaster relief. Expert in coordination and emergency logistics.',
-        badges: ['Gold Responder', 'Safe Driver', 'Top 10%'],
-        lastActive: '2 hours ago'
-    },
-    { 
-        id: 12, name: 'Priya Patel', hours: 86, rating: 4.7, 
-        skills: ['Teaching', 'Counseling', 'Documentation'], status: 'On Route',
-        phone: '+91 87654 32109', email: 'priya.p@example.com',
-        bio: 'Professional educator volunteering for digital literacy and child welfare programs. Passionate about community building.',
-        badges: ['Star Teacher', 'Punctual'],
-        lastActive: 'Just now'
-    },
-    { 
-        id: 13, name: 'Rajesh Kumar', hours: 210, rating: 5.0, 
-        skills: ['Construction', 'Rescue', 'Plumbing'], status: 'Available',
-        phone: '+91 76543 21098', email: 'rajesh.k@example.com',
-        bio: 'Skilled tradesperson focusing on infrastructure repair and rescue operations during urban floods.',
-        badges: ['Elite Rescuer', '5-Star Hero'],
-        lastActive: '1 day ago'
-    },
-    { 
-        id: 14, name: 'Sneha Shah', hours: 45, rating: 4.5, 
-        skills: ['Nutrition', 'Medical Triage', 'Hindi/English'], status: 'Busy',
-        phone: '+91 99887 76655', email: 'sneha.s@example.com',
-        bio: 'Clinical nutritionist assisting in community health camps and nutritional auditing for underserved wards.',
-        badges: ['Health Guide'],
-        lastActive: '5 hours ago'
-    }
-  ];
+  useEffect(() => {
+    const q = query(collection(db, 'volunteers'), orderBy('updated_at', 'desc'));
+    
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const demoVolunteers = [
+        { 
+            id: 'v1', name: 'Arjun Mehta', hours: 142, rating: 4.9, 
+            skills: ['First Aid', 'Logistics'], status: 'Available',
+            phone: '+91 98765 43210', email: 'arjun.m@example.com',
+            bio: 'Dedicated field volunteer with 3 years of experience in disaster relief.',
+            badges: ['Gold Responder'], lastActive: '2 hours ago'
+        },
+        { 
+            id: 'v2', name: 'Priya Patel', hours: 86, rating: 4.7, 
+            skills: ['Teaching', 'Counseling'], status: 'Busy',
+            phone: '+91 87654 32109', email: 'priya.p@example.com',
+            bio: 'Professional educator volunteering for digital literacy.',
+            badges: ['Star Teacher'], lastActive: 'Just now'
+        },
+        { 
+            id: 'v3', name: 'Rajesh Kumar', hours: 210, rating: 5.0, 
+            skills: ['Construction', 'Rescue'], status: 'Available',
+            phone: '+91 76543 21098', email: 'rajesh.k@example.com',
+            bio: 'Skilled tradesperson focusing on infrastructure repair.',
+            badges: ['Elite Rescuer'], lastActive: '1 day ago'
+        }
+      ];
+
+      const dbVolunteers = snapshot.docs.map(doc => {
+        const v = doc.data();
+        return {
+          id: doc.id,
+          // Support both flat (Join Now flow) and nested (Profile flow) structures
+          name: v.name || v.profile?.full_name || 'Anonymous Hero',
+          hours: v.total_hours || v.hours || 0,
+          rating: v.wellness_score ? (v.wellness_score / 20) : (v.rating || 4.5),
+          skills: v.skills || [],
+          status: v.status || 'Available',
+          phone: v.phone || v.profile?.phone || 'N/A',
+          email: v.email || v.profile?.email || 'N/A',
+          bio: v.bio || 'Ready to serve the community.',
+          badges: v.badges || ['Verified'],
+          lastActive: timeAgo(v.updated_at || v.created_at || new Date().toISOString())
+        };
+      });
+
+      const allVolunteers = [...dbVolunteers, ...demoVolunteers];
+      setVolunteers(allVolunteers);
+      setIsLoading(false);
+
+      // 🤖 Trigger AI Scout
+      if (!aiScout && allVolunteers.length > 0) {
+        setIsAiLoading(true);
+        fetch('/api/ai/volunteer-scout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            volunteers: allVolunteers.slice(0, 8),
+            activeNeeds: [] // Context provided by AI prompt generally
+          })
+        }).then(res => res.json())
+          .then(data => setAiScout(data))
+          .catch(err => console.error(err))
+          .finally(() => setIsAiLoading(false));
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const filteredVolunteers = volunteers.filter(v => 
+    v.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    v.skills.some((s: string) => s.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  if (isLoading) return <LoadingSkeleton type="page" />;
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 fade-in min-h-screen">
@@ -48,14 +99,62 @@ export default function Page() {
           <h1 className="text-3xl font-bold font-mukta text-[var(--ink)]">Volunteer Network</h1>
           <p className="text-[var(--ink-muted)] mt-1 font-medium">Manage verified profiles and optimize deployment logistics.</p>
         </div>
+        
         <div className="relative w-full md:w-64">
-           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-           <input type="text" placeholder="Search by name or skill..." className="w-full pl-10 pr-4 py-2 rounded-xl border border-[var(--border)] outline-none focus:ring-2 focus:ring-[var(--saffron)] transition-all" />
+           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
+           <input 
+             type="text" 
+             placeholder="Search by name or skill..." 
+             value={searchQuery}
+             onChange={e => setSearchQuery(e.target.value)}
+             className="w-full pl-10 pr-4 py-2 rounded-xl border border-[var(--border)] outline-none focus:ring-2 focus:ring-[var(--saffron)] transition-all" 
+           />
         </div>
       </div>
 
+      {/* AI STRATEGIC PANEL */}
+      <div className="bg-[#0F172A] rounded-3xl p-8 text-white relative overflow-hidden border border-slate-800 shadow-2xl">
+         <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12 scale-150"><Brain size={120} /></div>
+         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-8 space-y-4">
+               <div className="flex items-center gap-3 text-[var(--saffron)] mb-2">
+                  <Sparkles size={24} />
+                  <h2 className="text-xl font-black uppercase tracking-widest font-mukta">AI Talent Scout</h2>
+               </div>
+               <p className="text-slate-300 font-medium text-lg leading-relaxed italic">
+                  {isAiLoading ? 'Analyzing volunteer pool and strategic capacity...' : aiScout?.strategy || 'Reviewing current workforce logistics...'}
+               </p>
+               
+               <div className="flex flex-wrap gap-4 pt-4">
+                  {aiScout?.matches?.slice(0, 2).map((m: any, i: number) => (
+                    <div key={i} className="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center gap-4">
+                       <div className="w-10 h-10 rounded-full bg-[var(--saffron-light)] flex items-center justify-center text-[var(--saffron)] font-bold">{m.volunteerName[0]}</div>
+                       <div>
+                          <p className="text-[10px] font-bold text-[var(--saffron)] uppercase">Smart Match</p>
+                          <p className="text-xs font-bold">{m.volunteerName} → {m.needTitle}</p>
+                       </div>
+                    </div>
+                  ))}
+               </div>
+            </div>
+            
+            <div className="lg:col-span-4 bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
+               <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Brain size={14} /> Critical Skill Gaps
+               </h3>
+               <div className="space-y-2">
+                  {(aiScout?.gaps || ["Analyzing needs..."]).map((gap: string) => (
+                    <div key={gap} className="flex items-center gap-2 text-sm text-slate-300">
+                       <div className="w-1 h-1 rounded-full bg-red-500" /> {gap}
+                    </div>
+                  ))}
+               </div>
+            </div>
+         </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {volunteers.map(v => (
+        {filteredVolunteers.map(v => (
           <div key={v.id} className="card p-6 flex flex-col group hover:border-[var(--saffron)] transition-all bg-white relative overflow-hidden">
              <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--saffron)] opacity-5 translate-x-10 -translate-y-10 rounded-full" />
              
@@ -71,14 +170,14 @@ export default function Page() {
              
              <h3 className="text-xl font-bold font-mukta text-[var(--ink)] mb-1 group-hover:text-[var(--saffron)] transition-colors">{v.name}</h3>
              <div className="flex items-center gap-1.5 text-xs text-yellow-600 font-bold mb-4">
-                <Star size={12} fill="currentColor" /> {v.rating.toFixed(1)} <span className="text-gray-400 font-normal ml-1">({v.hours} hrs logged)</span>
+                <Star size={12} fill="currentColor" /> {v.rating.toFixed(1)} <span className="text-gray-600 font-normal ml-1">({v.hours} hrs logged)</span>
              </div>
 
              <div className="flex flex-wrap gap-1.5 mb-6 flex-1">
                 {v.skills.slice(0, 2).map(s => (
                   <span key={s} className="px-2 py-0.5 bg-gray-50 border border-gray-100 rounded-md text-[10px] font-bold uppercase text-gray-500 tracking-wider ">{s}</span>
                 ))}
-                {v.skills.length > 2 && <span className="text-[10px] font-bold text-gray-400">+{v.skills.length - 2} more</span>}
+                {v.skills.length > 2 && <span className="text-[10px] font-bold text-gray-600">+{v.skills.length - 2} more</span>}
              </div>
 
              <div className="grid grid-cols-2 gap-3 pt-6 border-t border-[var(--border)]">
@@ -117,38 +216,38 @@ export default function Page() {
                  <div className="w-full space-y-3">
                     <div className="bg-white p-3 rounded-2xl border border-[var(--border)]">
                         <p className="text-xl font-bold">{selectedVolunteer.hours}h</p>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Experience</p>
+                        <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Experience</p>
                     </div>
                     <div className="bg-white p-3 rounded-2xl border border-[var(--border)]">
                         <p className="text-xl font-bold">{selectedVolunteer.rating.toFixed(1)}</p>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Avg Rating</p>
+                        <p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Avg Rating</p>
                     </div>
                  </div>
               </div>
 
               {/* Right Panel: Content */}
               <div className="md:w-2/3 p-8 md:p-10 flex flex-col">
-                 <button onClick={() => setSelectedVolunteer(null)} className="ml-auto w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:text-[var(--ink)] transition-colors mb-2">&times;</button>
+                 <button onClick={() => setSelectedVolunteer(null)} className="ml-auto w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:text-[var(--ink)] transition-colors mb-2">&times;</button>
                  
                  <div className="space-y-6">
                     <section>
-                        <h4 className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">About Volunteer</h4>
+                        <h4 className="flex items-center gap-2 text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">About Volunteer</h4>
                         <p className="text-sm text-[var(--ink-muted)] leading-relaxed italic">"{selectedVolunteer.bio}"</p>
                     </section>
 
                     <section className="grid grid-cols-2 gap-4">
                         <div className="space-y-1">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1"><Phone size={10} /> Connectivity</h4>
+                            <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-1"><Phone size={10} /> Connectivity</h4>
                             <p className="text-sm font-bold">{selectedVolunteer.phone}</p>
                         </div>
                         <div className="space-y-1">
-                            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1"><Mail size={10} /> Email</h4>
+                            <h4 className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-1"><Mail size={10} /> Email</h4>
                             <p className="text-sm font-bold truncate">{selectedVolunteer.email}</p>
                         </div>
                     </section>
 
                     <section>
-                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Verified Skillset</h4>
+                        <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Verified Skillset</h4>
                         <div className="flex flex-wrap gap-2">
                             {selectedVolunteer.skills.map(s => (
                                 <span key={s} className="px-3 py-1 bg-[var(--surface-3)] text-[var(--ink)] rounded-lg text-xs font-bold border border-[var(--border)]">{s}</span>
@@ -157,7 +256,7 @@ export default function Page() {
                     </section>
 
                     <section>
-                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Achievements</h4>
+                        <h4 className="text-xs font-bold text-gray-600 uppercase tracking-widest mb-3">Achievements</h4>
                         <div className="flex flex-wrap gap-2">
                             {selectedVolunteer.badges.map(b => (
                                 <span key={b} className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-xl text-[10px] font-bold border border-yellow-100">
@@ -173,7 +272,7 @@ export default function Page() {
                     <button onClick={() => { setSelectedVolunteer(null); toast.success('Chat interface opened.'); }} className="w-14 h-14 bg-[var(--ink)] text-white rounded-2xl flex items-center justify-center hover:opacity-90"><MessageSquare size={20} /></button>
                  </div>
                  
-                 <div className="flex items-center gap-2 mt-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                 <div className="flex items-center gap-2 mt-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
                     <Clock size={12} /> Last Active: {selectedVolunteer.lastActive}
                  </div>
               </div>

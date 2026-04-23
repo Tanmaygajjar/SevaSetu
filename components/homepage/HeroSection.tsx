@@ -47,34 +47,34 @@ function HeroStatsDisplay() {
 
   return (
     <>
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8 text-sm">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-8 text-sm shadow-xl">
         <span className="live-dot" />
-        <span className="text-white/90">
-          Live <span className="font-semibold text-white ml-1">{currentStats.active_today}</span> volunteers active right now
+        <span className="text-white font-bold tracking-tight">
+          Live <span className="text-[var(--saffron)] ml-1">{currentStats.active_today}</span> volunteers active right now
         </span>
       </div>
 
       {/* Stats row at the bottom */}
-      <div className="flex items-center gap-6 pt-8 border-t border-white/10">
-        <Link href="/join" className="flex flex-col hover:opacity-80 transition-opacity">
-          <span className="text-2xl font-bold text-white font-mukta tabular-nums">
+      <div className="flex items-center gap-8 pt-10 border-t border-white/20">
+        <Link href="/join" className="flex flex-col hover:opacity-80 transition-opacity group">
+          <span className="text-3xl font-black text-white font-mukta tabular-nums group-hover:text-[var(--saffron)] transition-colors">
             {(currentStats.total_volunteers).toLocaleString()}
           </span>
-          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">Volunteers</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-gray-200 font-black mt-1">Volunteers</span>
         </Link>
-        <div className="h-8 w-px bg-white/20" />
-        <Link href="/ngos" className="flex flex-col hover:opacity-80 transition-opacity">
-          <span className="text-2xl font-bold text-white font-mukta tabular-nums">
+        <div className="h-10 w-px bg-white/20" />
+        <Link href="/ngos" className="flex flex-col hover:opacity-80 transition-opacity group">
+          <span className="text-3xl font-black text-white font-mukta tabular-nums group-hover:text-[var(--saffron)] transition-colors">
             {(currentStats.ngos_registered).toLocaleString()}
           </span>
-          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">NGOs</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-gray-200 font-black mt-1">NGO Partners</span>
         </Link>
-        <div className="h-8 w-px bg-white/20" />
+        <div className="h-10 w-px bg-white/20" />
         <div className="flex flex-col">
-          <span className="text-2xl font-bold text-white font-mukta tabular-nums">
+          <span className="text-3xl font-black text-white font-mukta tabular-nums">
             {(currentStats.needs_resolved).toLocaleString()}
           </span>
-          <span className="text-[10px] uppercase tracking-widest text-gray-400 font-medium">Resolved</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-gray-200 font-black mt-1">Resolved</span>
         </div>
       </div>
     </>
@@ -108,23 +108,23 @@ export function HeroSection() {
             <HeroStatsDisplay />
           ) : (
             <div className="h-[200px] flex items-end">
-               <div className="w-full h-2 bg-white/5 animate-pulse rounded" />
+               <div className="w-full h-2 bg-white/10 animate-pulse rounded" />
             </div>
           )}
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-mukta leading-[1.1] tracking-tight text-white mb-6 mt-8">
-            <span className="block text-[var(--saffron)] drop-shadow-[0_0_30px_rgba(255,107,53,0.3)]">सेवा सेतु</span>
+            <span className="block text-[var(--saffron)] drop-shadow-[0_0_40px_rgba(255,107,53,0.4)]">सेवा सेतु</span>
             SevaSetu
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-300 leading-relaxed mb-10 max-w-xl">
-            Connecting community needs to the right volunteer — in minutes. Powered by AI. Built for India.
+          <p className="text-lg md:text-xl text-gray-100 font-medium leading-relaxed mb-10 max-w-xl drop-shadow-sm">
+            Connecting community needs to the right volunteer — in minutes. <span className="text-[var(--saffron)] font-bold">Powered by AI.</span> Built for India.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href="/join" 
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-mukta font-bold text-lg bg-[var(--saffron)] text-white hover:bg-[var(--saffron-dark)] transition-transform hover:scale-105 active:scale-95 shadow-[0_4px_20px_var(--saffron-glow)]"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-mukta font-bold text-lg bg-[var(--saffron)] text-white hover:bg-[var(--saffron-dark)] transition-transform hover:scale-105 active:scale-95 shadow-[0_4px_30px_var(--saffron-glow)]"
             >
               Join as Volunteer
               <ArrowRight size={20} />
@@ -132,7 +132,7 @@ export function HeroSection() {
             
             <Link 
               href="/map" 
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-mukta font-bold text-lg bg-white/10 backdrop-blur-md text-white border border-white/20 hover:bg-white/20 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-mukta font-bold text-lg bg-white/15 backdrop-blur-md text-white border border-white/30 hover:bg-white/25 transition-colors shadow-lg"
             >
               Explore Needs Map
               <ArrowUpRight size={20} />

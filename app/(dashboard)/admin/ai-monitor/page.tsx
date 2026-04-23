@@ -1,12 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bot, AlertCircle, CheckCircle2, Search, Filter, Sparkles, XCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { db } from '@/lib/firebase/config';
 
 export default function AiMonitor() {
   const [filter, setFilter] = useState<'all' | 'flagged' | 'low_confidence'>('flagged');
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Mocking AI moderation queue data since we're not recording AI logs directly in a separate table yet
   const logs = [
@@ -133,7 +138,9 @@ export default function AiMonitor() {
                 <tr key={log.id} className="border-b border-[var(--border)] hover:bg-[var(--surface-2)] transition-colors">
                   <td className="p-4 align-top">
                     <p className="font-mono text-[var(--ink)]">{log.id}</p>
-                    <p className="text-xs text-[var(--ink-muted)]">{new Date(log.timestamp).toLocaleTimeString()}</p>
+                    <p className="text-xs text-[var(--ink-muted)]">
+                      {isMounted ? new Date(log.timestamp).toLocaleTimeString() : '--:--:--'}
+                    </p>
                   </td>
                   <td className="p-4 align-top">
                     <p className="font-bold font-mukta">{log.action}</p>

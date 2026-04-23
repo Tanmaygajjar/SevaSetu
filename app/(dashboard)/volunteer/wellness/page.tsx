@@ -26,7 +26,7 @@ export default function Page() {
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-gray-400 mt-2">
+          <div className="flex justify-between text-xs text-gray-600 mt-2">
             <span>Mon</span><span>Wed</span><span>Fri</span><span>Sun</span>
           </div>
         </div>

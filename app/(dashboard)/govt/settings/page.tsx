@@ -30,7 +30,7 @@ export default function Page() {
       </div>
 
       <div className="flex justify-end items-center gap-4 pt-10 border-t">
-         <button className="text-xs font-bold text-gray-400 hover:text-red-500 transition-colors uppercase tracking-widest">Wipe Local Logs</button>
+         <button className="text-xs font-bold text-gray-600 hover:text-red-500 transition-colors uppercase tracking-widest">Wipe Local Logs</button>
          <button onClick={() => toast.success('Official district settings updated!')} className="px-10 py-4 bg-blue-900 text-white rounded-2xl font-bold shadow-2xl flex items-center gap-2"><Save size={18} /> Apply Governance</button>
       </div>
     </div>

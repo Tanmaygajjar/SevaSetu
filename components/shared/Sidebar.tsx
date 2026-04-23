@@ -9,7 +9,7 @@ import {
   Users, Settings, Bell, Heart, GraduationCap, User,
   Building2, PlusCircle, Columns3, Database, Shield,
   Eye, Activity, Globe, AlertTriangle, Scale, ChevronLeft,
-  ChevronRight, LogOut, Menu,
+  ChevronRight, LogOut, Menu, ShieldAlert, Radio, TrendingUp
 } from 'lucide-react';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import type { UserRole } from '@/types';
@@ -49,6 +49,7 @@ const ROLE_NAV: Record<string, NavItem[]> = {
     { href: '/ngo/needs/new', label: 'New Need', icon: PlusCircle },
     { href: '/ngo/tasks', label: 'Task Board', icon: Columns3 },
     { href: '/ngo/volunteers', label: 'Volunteers', icon: Users },
+    { href: '/ngo/notifications', label: 'Alerts', icon: Bell },
     { href: '/ngo/analytics', label: 'Analytics', icon: BarChart3 },
     { href: '/ngo/impact-report', label: 'Impact Report', icon: FileText },
     { href: '/ngo/data-intake', label: 'Data Intake', icon: Database },
@@ -72,9 +73,17 @@ const ROLE_NAV: Record<string, NavItem[]> = {
     { href: '/govt/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/govt/map', label: 'District Map', icon: MapPin },
     { href: '/govt/alerts', label: 'Critical Alerts', icon: AlertTriangle },
+    { href: '/govt/notifications', label: 'System Notifications', icon: Bell },
     { href: '/govt/ngos', label: 'NGOs', icon: Building2 },
     { href: '/govt/scheme-gaps', label: 'Scheme Gaps', icon: Activity },
     { href: '/govt/reports', label: 'Reports', icon: FileText },
+  ],
+  super_admin: [
+    { href: '/admin/super', label: 'Command Center', icon: ShieldAlert },
+    { href: '/admin/super/stats', label: 'Impact Analytics', icon: TrendingUp },
+    { href: '/admin/super/telemetry', label: 'System Telemetry', icon: Activity },
+    { href: '/admin/super/broadcast', label: 'Emergency Broadcast', icon: Radio },
+    { href: '/admin/settings', label: 'Global Settings', icon: Settings },
   ],
 };
 
@@ -85,6 +94,7 @@ const ROLE_LABELS: Record<string, string> = {
   ngo_reporter: 'NGO REPORTER',
   platform_admin: 'PLATFORM ADMIN',
   govt_officer: 'GOVT OFFICER',
+  super_admin: 'SUPREME OVERSEER',
 };
 
 export function Sidebar() {

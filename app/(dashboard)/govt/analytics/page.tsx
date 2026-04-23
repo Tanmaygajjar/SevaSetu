@@ -45,7 +45,7 @@ export default function Page() {
          ].map((s, i) => (
             <div key={i} className="card p-6 flex items-center gap-4">
                <div className={`w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center ${s.c}`}>{s.i}</div>
-               <div><p className="text-2xl font-bold text-[var(--ink)]">{s.v}</p><p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{s.l}</p></div>
+               <div><p className="text-2xl font-bold text-[var(--ink)]">{s.v}</p><p className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">{s.l}</p></div>
             </div>
          ))}
       </div>

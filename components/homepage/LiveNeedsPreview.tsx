@@ -60,11 +60,14 @@ export function LiveNeedsPreview() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold font-mukta mb-2 flex items-center gap-3">
-              <span className="live-dot" />
+            <h2 
+              className="text-4xl md:text-5xl font-black font-mukta mb-4 flex items-center gap-4 !text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              style={{ color: 'white' }}
+            >
+              <span className="live-dot scale-150 shadow-[0_0_15px_rgba(22,163,74,0.5)]" />
               Active needs right now
             </h2>
-            <p className="text-gray-400">Real-time requests awaiting volunteer support.</p>
+            <p className="text-gray-300 font-medium">Real-time requests awaiting volunteer support.</p>
           </div>
           
           <Link href="/map" className="text-[var(--saffron)] flex items-center gap-2 hover:underline font-medium">
@@ -112,8 +115,8 @@ export function LiveNeedsPreview() {
                     </h3>
                     
                     <div className="mt-auto space-y-3">
-                      <div className="flex items-center gap-2 text-sm text-gray-400">
-                        <MapPin size={14} />
+                      <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
+                        <MapPin size={14} className="text-[var(--saffron)]" />
                         {need.ward || need.city}
                       </div>
                       
@@ -126,7 +129,7 @@ export function LiveNeedsPreview() {
                           {need.urgency_score >= 8 ? 'Critical' : need.urgency_score >= 6 ? 'High' : 'Medium'} · {need.urgency_score.toFixed(1)}
                         </span>
                         
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-400">
                           {new Date(need.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -136,7 +139,7 @@ export function LiveNeedsPreview() {
               </div>
             ))
           ) : (
-            <div className="w-full py-12 text-center text-gray-400 border border-white/10 rounded-2xl bg-white/5">
+            <div className="w-full py-12 text-center text-gray-300 border border-white/10 rounded-2xl bg-white/5 font-medium">
               No active needs in {selectedCity} right now. Select another city.
             </div>
           )}

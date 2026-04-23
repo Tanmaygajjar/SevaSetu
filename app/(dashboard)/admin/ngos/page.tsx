@@ -27,11 +27,11 @@ export default function Page() {
                   <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${n.s === 'Verified' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>{n.s}</span>
                </div>
                <h3 className="text-xl font-bold font-mukta mb-1 group-hover:text-[var(--saffron)] transition-colors">{n.n}</h3>
-               <p className="text-xs text-gray-400 flex items-center gap-1 mb-6"><MapPin size={12} /> {n.r} Compliance Zone</p>
+               <p className="text-xs text-gray-600 flex items-center gap-1 mb-6"><MapPin size={12} /> {n.r} Compliance Zone</p>
                
                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="p-3 bg-gray-50 rounded-xl"><p className="text-lg font-bold text-[var(--ink)]">{n.h}</p><p className="text-[10px] text-gray-400 font-bold uppercase">Impact Score</p></div>
-                  <div className="p-3 bg-gray-50 rounded-xl"><p className="text-lg font-bold text-[var(--ink)]">{Math.floor(Math.random()*50)+10}</p><p className="text-[10px] text-gray-400 font-bold uppercase">Active Sites</p></div>
+                  <div className="p-3 bg-gray-50 rounded-xl"><p className="text-lg font-bold text-[var(--ink)]">{n.h}</p><p className="text-[10px] text-gray-600 font-bold uppercase">Impact Score</p></div>
+                  <div className="p-3 bg-gray-50 rounded-xl"><p className="text-lg font-bold text-[var(--ink)]">{Math.floor(Math.random()*50)+10}</p><p className="text-[10px] text-gray-600 font-bold uppercase">Active Sites</p></div>
                </div>
 
                <div className="flex gap-2">

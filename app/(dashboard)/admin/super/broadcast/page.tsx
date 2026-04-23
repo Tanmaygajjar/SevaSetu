@@ -2,29 +2,82 @@
 
 import { useState } from 'react';
 import { AuditLedger, pushAuditLog } from '@/components/shared/AuditLedger';
-import { Radio, Send, ShieldAlert, Globe } from 'lucide-react';
+import { Radio, Send, ShieldAlert, Globe, CheckCircle, XCircle } from 'lucide-react';
+import { collection, addDoc, serverTimestamp, getDocs, query, where, writeBatch, doc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 import toast from 'react-hot-toast';
 
 export default function BroadcastPage() {
   const [message, setMessage] = useState('');
   const [isBroadcasting, setIsBroadcasting] = useState(false);
+  const [isDeactivating, setIsDeactivating] = useState(false);
 
   const handleBroadcast = async () => {
     if (!message.trim()) return;
     setIsBroadcasting(true);
-    await pushAuditLog('SYSTEM_BROADCAST', `Emergency broadcast sent: "${message.slice(0, 30)}..."`, 'CRITICAL');
-    toast.success('Broadcast transmitted globally.');
-    setMessage('');
-    setIsBroadcasting(false);
+    try {
+      await pushAuditLog('SYSTEM_BROADCAST', `Emergency broadcast sent: "${message.slice(0, 30)}..."`, 'CRITICAL');
+      
+      await addDoc(collection(db, 'broadcasts'), {
+        message: message.trim(),
+        sender: 'SUPREME_OVERSEER',
+        type: 'EMERGENCY',
+        timestamp: serverTimestamp(),
+        active: true
+      });
+
+      toast.success('Broadcast transmitted globally.');
+      setMessage('');
+    } catch (error) {
+      console.error('Broadcast failed', error);
+      toast.error('Failed to transmit broadcast.');
+    } finally {
+      setIsBroadcasting(false);
+    }
+  };
+
+  const deactivateAllBroadcasts = async () => {
+    if (!window.confirm('This will remove all emergency banners from all users dashboards. Proceed?')) return;
+    setIsDeactivating(true);
+    try {
+      const q = query(collection(db, 'broadcasts'), where('active', '==', true));
+      const snapshot = await getDocs(q);
+      
+      if (snapshot.empty) {
+        toast.error('No active broadcasts to clear.');
+        return;
+      }
+
+      const batch = writeBatch(db);
+      snapshot.docs.forEach((d) => {
+        batch.update(doc(db, 'broadcasts', d.id), { active: false });
+      });
+      
+      await batch.commit();
+      await pushAuditLog('BROADCAST_TERMINATED', 'All active global broadcasts deactivated.', 'HIGH');
+      toast.success('Global emergency status cleared.');
+    } catch (error) {
+      console.error('Deactivation failed', error);
+      toast.error('Failed to clear broadcasts.');
+    } finally {
+      setIsDeactivating(false);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F5F9] p-8 space-y-8">
-      <div className="flex justify-between items-end">
+    <div className="min-h-screen bg-[#F1F5F9] p-8 space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
           <h1 className="text-4xl font-black font-mukta text-slate-900 tracking-tighter">Emergency Radio</h1>
-          <p className="text-slate-500 font-medium">Direct low-latency communication with all active nodes.</p>
+          <p className="text-slate-600 font-medium mt-1">Direct low-latency communication with all active nodes.</p>
         </div>
+        <button 
+          onClick={deactivateAllBroadcasts}
+          disabled={isDeactivating}
+          className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-300 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/20"
+        >
+          {isDeactivating ? 'Clearing...' : <><CheckCircle size={16} /> Mark Emergency Over</>}
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -50,7 +103,7 @@ export default function BroadcastPage() {
               <button 
                 onClick={handleBroadcast}
                 disabled={isBroadcasting || !message.trim()}
-                className="w-full py-6 bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white rounded-3xl font-black text-lg tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-red-900/40 uppercase"
+                className="w-full py-6 bg-red-600 hover:bg-red-50 disabled:bg-slate-800 text-white rounded-3xl font-black text-lg tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl shadow-red-900/40 uppercase"
               >
                 {isBroadcasting ? 'Transmitting...' : <><Send size={24} /> Execute Broadcast</>}
               </button>

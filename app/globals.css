@@ -18,7 +18,7 @@
   /* Neutral — ultra-high contrast */
   --ink: #0C0A09;
   --ink-muted: #44403C;
-  --ink-faint: #78716C;
+  --ink-faint: #57534E;
   --surface: #FAFAF9;
   --surface-2: #F5F5F4;
   --surface-3: #EFEDEC;
@@ -28,7 +28,7 @@
   /* Sidebar */
   --sidebar-bg: #141210;
   --sidebar-border: #2A2724;
-  --sidebar-text: #A8A29E;
+  --sidebar-text: #D6D3D1;
   --sidebar-active: #FF6B35;
   --sidebar-hover: #1E1B18;
 
