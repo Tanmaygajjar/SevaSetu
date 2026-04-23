@@ -202,7 +202,7 @@ export default function NeedsMap() {
       </div>
 
       {/* Map Area */}
-      <div className="flex-1 relative h-1/2 md:h-full z-0">
+      <div className="flex-1 relative h-1/2 md:h-full z-0" data-no-translate>
         <MapContainer 
           center={[22.5, 80.0]} 
           zoom={5} 
@@ -254,7 +254,7 @@ export default function NeedsMap() {
 
       {/* Detail Panel */}
       {selectedNeed && (
-        <div className="absolute top-0 right-0 w-full md:w-[420px] h-full bg-white shadow-2xl z-[500] border-l border-[var(--border)] flex flex-col animate-in slide-in-from-right duration-500">
+        <div className="absolute top-0 right-0 w-full md:w-[420px] h-full bg-white shadow-2xl z-[500] border-l border-[var(--border)] flex flex-col animate-in slide-in-from-right duration-500" data-no-translate>
           <div className="p-6 border-b border-[var(--border)] flex justify-between items-center bg-[var(--surface)]">
             <div>
               <h3 className="font-bold font-mukta text-lg">Crisis Inspection</h3>

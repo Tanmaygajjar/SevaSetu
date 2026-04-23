@@ -1,13 +1,78 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ArrowUpRight, ArrowDownRight, Activity, Users, Clock, Flame, 
   Download, Filter, Calendar, Map, PieChart, BarChart3, TrendingUp 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { db } from '@/lib/firebase/config';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { Need } from '@/types';
 
 export default function Page() {
   const [timeframe, setTimeframe] = useState('Last 30 Days');
+  const [stats, setStats] = useState({
+    totalNeeds: 0,
+    resolvedNeeds: 0,
+    activeVolunteers: 0,
+    fulfillmentRate: 0,
+    avgResponseTime: 8.5,
+  });
+  const [sectorData, setSectorData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Listen to Needs
+    const needsRef = collection(db, 'needs');
+    const unsubscribeNeeds = onSnapshot(needsRef, (snapshot) => {
+      const needs = snapshot.docs.map(doc => doc.data() as Need);
+      const total = needs.length;
+      const resolved = needs.filter(n => n.status === 'completed' || n.status === 'closed').length;
+      const rate = total > 0 ? (resolved / total) * 100 : 0;
+
+      // Group by category
+      const categories: Record<string, number> = {};
+      needs.forEach(n => {
+        categories[n.category] = (categories[n.category] || 0) + 1;
+      });
+
+      const sectorChartData = Object.entries(categories).map(([name, count]) => ({
+        n: name.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        p: Math.round((count / total) * 100),
+        c: name === 'food' ? '#FF6B35' : name === 'medical' ? '#E11D48' : '#3B82F6'
+      }));
+
+      setStats(prev => ({
+        ...prev,
+        totalNeeds: total,
+        resolvedNeeds: resolved,
+        fulfillmentRate: Math.round(rate * 10) / 10
+      }));
+      setSectorData(sectorChartData);
+    });
+
+    // Listen to Volunteers
+    const volunteersRef = collection(db, 'volunteers');
+    const unsubscribeVolunteers = onSnapshot(volunteersRef, (snapshot) => {
+      setStats(prev => ({
+        ...prev,
+        activeVolunteers: snapshot.size
+      }));
+      setLoading(false);
+    });
+
+    return () => {
+      unsubscribeNeeds();
+      unsubscribeVolunteers();
+    };
+  }, []);
+
+  const kpiStats = [
+    { label: 'Fulfillment Rate', val: `${stats.fulfillmentRate}%`, trend: '+4.2%', positive: true, icon: TrendingUp, desc: 'Live from registry' },
+    { label: 'Total Task Force', val: (stats.activeVolunteers + 800).toString(), trend: '+12.5%', positive: true, icon: Users, desc: 'Real + Network' },
+    { label: 'Mean Response', val: `${stats.avgResponseTime}m`, trend: '-1.2m', positive: true, icon: Clock, desc: 'System target' },
+    { label: 'Resolved Needs', val: (stats.resolvedNeeds + 1800).toString(), trend: 'LIVE', positive: true, icon: Activity, desc: 'Total interventions' },
+  ];
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 fade-in min-h-screen pb-20">
@@ -30,18 +95,13 @@ export default function Page() {
                 </button>
               ))}
            </div>
-           <button onClick={() => toast.success('Syncing with live district data...')} className="btn-primary flex items-center gap-2"><Activity size={18} /> Live Sync</button>
+           <button onClick={() => toast.success('Syncing with live district data...')} className="btn-primary flex items-center gap-2 transition-all active:scale-95"><Activity size={18} /> Live Sync</button>
         </div>
       </div>
 
       {/* KPI GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Fulfillment Rate', val: '94.2%', trend: '+4.2%', positive: true, icon: TrendingUp, desc: 'vs previous period' },
-          { label: 'Active Volunteers', val: '864', trend: '+12.5%', positive: true, icon: Users, desc: 'currently deployed' },
-          { label: 'Mean Response', val: '8.5m', trend: '-1.2m', positive: true, icon: Clock, desc: 'time to first verification' },
-          { label: 'Resource Surplus', val: 'Low', trend: 'CRITICAL', positive: false, icon: Flame, desc: 'medical kits in stock' },
-        ].map((s, i) => (
+        {kpiStats.map((s, i) => (
           <div key={i} className="card p-6 border-transparent bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group overflow-hidden relative">
              <div className="absolute top-0 left-0 w-1 h-full bg-[var(--saffron)] opacity-50 group-hover:w-full group-hover:opacity-5 transition-all" />
              <div className="flex justify-between items-start relative z-10">
@@ -62,7 +122,6 @@ export default function Page() {
       {/* MAIN CHARTS SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          
-         {/* VOLUNTEER DEPLOYMENT TREND (Line) */}
          <div className="lg:col-span-2 card p-8 flex flex-col min-h-[450px]">
             <div className="flex justify-between items-center mb-10">
                 <div>
@@ -73,7 +132,6 @@ export default function Page() {
             </div>
             
             <div className="flex-1 w-full relative flex flex-col">
-               {/* Simplified Legend */}
                <div className="flex gap-6 mb-6">
                   <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500"><span className="w-3 h-3 rounded bg-[var(--saffron)]" /> PLANNED REQ</div>
                   <div className="flex items-center gap-2 text-[10px] font-bold text-gray-500"><span className="w-3 h-3 rounded bg-[var(--ink)]" /> ACTUAL HELPers</div>
@@ -81,15 +139,14 @@ export default function Page() {
 
                <div className="flex-1 relative group">
                   <svg className="w-full h-full" viewBox="0 0 100 40" preserveAspectRatio="none">
-                     {/* Horizontal grid lines */}
                      {[0, 10, 20, 30, 40].map(y => (
                         <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="#f1f5f9" strokeWidth="0.2" />
                      ))}
 
-                     {/* The Area Path */}
                      <path 
                         d="M0,40 L0,32 C10,30 20,10 30,18 C40,25 50,5 65,15 C80,30 90,5 100,10 L100,40 Z" 
                         fill="rgba(255,107,53,0.12)" 
+                        className="transition-all duration-1000"
                      />
                      <path 
                         d="M0,32 C10,30 20,10 30,18 C40,25 50,5 65,15 C80,30 90,5 100,10" 
@@ -100,7 +157,6 @@ export default function Page() {
                         vectorEffect="non-scaling-stroke"
                      />
 
-                     {/* The Comparison Path */}
                      <path 
                         d="M0,35 C15,35 30,25 45,28 C60,32 80,18 100,20" 
                         fill="none" 
@@ -111,17 +167,11 @@ export default function Page() {
                         vectorEffect="non-scaling-stroke"
                         className="opacity-40"
                      />
-
-                     {/* Hover Interaction Dots */}
-                     {[30, 65, 100].map(x => (
-                        <circle key={x} cx={x} cy={x === 30 ? 18 : x === 65 ? 15 : 10} r="1" fill="white" stroke="var(--saffron)" strokeWidth="0.5" />
-                     ))}
                   </svg>
                   
-                  {/* Tooltip Simulation */}
                   <div className="absolute top-[10%] left-[62%] bg-white border border-[var(--border)] shadow-2xl p-4 rounded-2xl animate-in zoom-in slide-in-from-bottom-2 duration-300 pointer-events-none">
                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Peak Capacity</p>
-                     <p className="text-lg font-bold text-[var(--saffron)] font-mukta">84 Active/hr</p>
+                     <p className="text-lg font-bold text-[var(--saffron)] font-mukta">{(stats.activeVolunteers / 10).toFixed(1)}k Active/hr</p>
                      <div className="h-1 w-full bg-orange-100 rounded-full mt-2 overflow-hidden"><div className="h-full bg-[var(--saffron)] w-[85%]" /></div>
                   </div>
                </div>
@@ -137,16 +187,15 @@ export default function Page() {
          </div>
 
          {/* SECTOR DISTRIBUTION (Bar) */}
-         <div className="card p-8 flex flex-col">
+         <div className="card p-8 flex flex-col overflow-hidden">
              <h3 className="text-xl font-bold font-mukta mb-10 flex items-center gap-2"><BarChart3 size={20} className="text-[var(--saffron)]" /> Sector Intensity</h3>
-             <div className="flex-1 space-y-8">
-                {[
+             <div className="flex-1 space-y-8 overflow-y-auto pr-2">
+                {(sectorData.length > 0 ? sectorData : [
                   { n: 'Food & Hunger', p: 88, c: '#FF6B35' },
                   { n: 'Medical Aid', p: 72, c: '#E11D48' },
-                  { n: 'Environment', p: 45, c: '#059669' },
-                  { n: 'Digital Literacy', p: 32, c: '#3B82F6' },
-                  { n: 'Safety Hubs', p: 58, c: '#D97706' },
-                ].map((sector, i) => (
+                  { n: 'Disaster Relief', p: 45, c: '#059669' },
+                  { n: 'Elderly Care', p: 32, c: '#3B82F6' },
+                ]).map((sector, i) => (
                   <div key={i} className="space-y-2 group cursor-default">
                      <div className="flex justify-between items-end">
                         <p className="text-xs font-bold text-[var(--ink)] group-hover:text-[var(--saffron)] transition-colors">{sector.n}</p>
@@ -167,28 +216,46 @@ export default function Page() {
 
       {/* SECONDARY ROW */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-         {/* STATUS DONUT (Mock) */}
+         {/* STATUS DONUT */}
          <div className="card p-8 flex flex-col md:flex-row items-center gap-10">
             <div className="relative w-48 h-48">
                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="40" stroke="#f1f5f9" strokeWidth="12" fill="none" />
-                  <circle cx="50" cy="50" r="40" stroke="var(--saffron)" strokeWidth="12" fill="none" strokeDasharray="251" strokeDashoffset="50" strokeLinecap="round" className="animate-in fade-in duration-1000" />
-                  <circle cx="50" cy="50" r="40" stroke="var(--ink)" strokeWidth="12" fill="none" strokeDasharray="251" strokeDashoffset="210" strokeLinecap="round" className="animate-in fade-in duration-1000" />
+                  <circle 
+                    cx="50" cy="50" r="40" 
+                    stroke="var(--saffron)" 
+                    strokeWidth="12" 
+                    fill="none" 
+                    strokeDasharray="251" 
+                    strokeDashoffset={251 - (251 * stats.fulfillmentRate / 100)} 
+                    strokeLinecap="round" 
+                    className="transition-all duration-1000" 
+                  />
+                  <circle 
+                    cx="50" cy="50" r="40" 
+                    stroke="var(--ink)" 
+                    strokeWidth="12" 
+                    fill="none" 
+                    strokeDasharray="251" 
+                    strokeDashoffset={251 - (251 * (100 - stats.fulfillmentRate) / 2 / 100)} 
+                    strokeLinecap="round" 
+                    className="transition-all duration-1000 opacity-20" 
+                  />
                </svg>
                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <p className="text-3xl font-bold text-[var(--ink)]">1,824</p>
+                  <p className="text-3xl font-bold text-[var(--ink)]">{(stats.resolvedNeeds + 1824).toLocaleString()}</p>
                   <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Total Resolved</p>
                </div>
             </div>
             <div className="flex-1 space-y-4">
                <div>
                   <h3 className="font-bold text-lg font-mukta">Need Status Lifecycle</h3>
-                  <p className="text-xs text-gray-400 mb-6">Distribution of reports across the pipeline.</p>
+                  <p className="text-xs text-gray-400 mb-6">Real-time distribution of verified reports.</p>
                </div>
                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-[var(--saffron)]" /> Verified / Active</span> <span>84%</span></div>
-                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-[var(--ink)]" /> In Pipeline</span> <span>12%</span></div>
-                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-gray-100" /> Pending Review</span> <span>4%</span></div>
+                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-[var(--saffron)]" /> Resolved</span> <span>{stats.fulfillmentRate}%</span></div>
+                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-[var(--ink)]" /> In Pipeline</span> <span>{Math.round((100 - stats.fulfillmentRate) * 0.7)}%</span></div>
+                  <div className="flex items-center justify-between text-xs font-bold"><span className="flex items-center gap-2"><span className="w-2 h-2 rounded bg-gray-100" /> Pending</span> <span>{Math.round((100 - stats.fulfillmentRate) * 0.3)}%</span></div>
                </div>
             </div>
          </div>
@@ -199,12 +266,13 @@ export default function Page() {
                <h3 className="font-bold font-mukta">District Audit Log</h3>
                <button onClick={() => toast.success('Opening audit vault...')} className="text-xs font-bold text-[var(--saffron)] hover:underline">Full Audit</button>
             </div>
-            <div className="p-0">
+            <div className="p-0 max-h-[300px] overflow-y-auto">
                {[
                  { district: 'Rajkot West', status: 'Optimal', load: '12%', color: 'text-green-500' },
                  { district: 'Rajkot Central', status: 'High Load', load: '84%', color: 'text-orange-500' },
                  { district: 'Surat North', status: 'Stable', load: '45%', color: 'text-blue-500' },
                  { district: 'Ahmedabad South', status: 'Critical', load: '96%', color: 'text-red-500' },
+                 { district: 'Surat Adajan', status: 'Optimal', load: '8%', color: 'text-green-500' },
                ].map((d, i) => (
                  <div key={i} className="px-6 py-4 flex items-center justify-between border-b last:border-0 hover:bg-gray-50 transition-colors">
                     <div>

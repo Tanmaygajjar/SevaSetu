@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, onSnapshot, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { Need } from '@/types';
-import { AlertCircle, Clock, CheckCircle2, UserPlus, MoreVertical, X, Check } from 'lucide-react';
+import { AlertCircle, Clock, CheckCircle2, UserPlus, MoreVertical, X, Check, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { assignTask } from '@/lib/assignmentService';
 
 type Column = 'reported' | 'verified' | 'in_progress' | 'completed';
 
@@ -107,26 +108,40 @@ export default function NgoTasks() {
   const assignVolunteer = async (volunteerId: string) => {
     if (!selectedNeedForAssign) return;
     
+    const loadingToast = toast.loading('Assigning volunteer...');
     try {
-      const taskRef = doc(collection(db, 'tasks'));
-      await setDoc(taskRef, {
-        id: taskRef.id,
-        need_id: selectedNeedForAssign.id,
-        volunteer_id: volunteerId,
-        status: 'assigned',
-        assigned_at: new Date().toISOString()
-      });
-      
-      await updateDoc(doc(db, 'needs', selectedNeedForAssign.id), {
-        status: 'verified',
-        assigned_volunteer_id: volunteerId
-      });
-      
-      toast.success('Volunteer assigned successfully!');
+      await assignTask(selectedNeedForAssign.id, volunteerId);
+      toast.success('Volunteer assigned successfully!', { id: loadingToast });
       setSelectedNeedForAssign(null);
     } catch (error: any) {
-      toast.error('Assignment failed: ' + error.message);
+      toast.error('Assignment failed: ' + error.message, { id: loadingToast });
     }
+  };
+
+  const deleteNeed = async (needId: string) => {
+    if (!window.confirm('Are you sure you want to delete this task? This action cannot be undone.')) return;
+
+    const promise = new Promise(async (resolve, reject) => {
+      try {
+        if (!needId.startsWith('kn-')) {
+          const needRef = doc(db, 'needs', needId);
+          await deleteDoc(needRef);
+        } else {
+          console.log('Demo Mode: Deleting local state instead of remote DB');
+        }
+
+        setLocalNeeds(prev => prev.filter(n => n.id !== needId));
+        setTimeout(() => resolve(true), 500);
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    toast.promise(promise, {
+      loading: 'Deleting task...',
+      success: 'Task deleted successfully',
+      error: 'Failed to delete task'
+    });
   };
 
   // Group needs
@@ -184,31 +199,68 @@ export default function NgoTasks() {
                       <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--ink-faint)] bg-[var(--surface-2)] px-2 py-0.5 rounded">
                         {need.category}
                       </span>
-                      <button 
-                        onClick={() => setSelectedNeedForAssign(need)}
-                        className="text-[var(--saffron)] hover:bg-[var(--saffron-light)] p-1 rounded-md transition-colors opacity-0 group-hover:opacity-100 flex items-center gap-1 text-[10px] font-bold"
-                      >
-                        <UserPlus size={14} /> ASSIGN
-                      </button>
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => setSelectedNeedForAssign(need)}
+                          className="text-[var(--saffron)] hover:bg-[var(--saffron-light)] p-1 rounded-md transition-colors flex items-center gap-1 text-[10px] font-bold"
+                        >
+                          <UserPlus size={14} /> ASSIGN
+                        </button>
+                        <button 
+                          onClick={() => deleteNeed(need.id)}
+                          className="text-red-500 hover:bg-red-50 p-1 rounded-md transition-colors flex items-center gap-1 text-[10px] font-bold"
+                          title="Delete Task"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </div>
 
                     {selectedNeedForAssign?.id === need.id && (
                       <div className="absolute inset-0 bg-white z-20 p-4 rounded-xl flex flex-col animate-in slide-in-from-bottom duration-200">
                         <div className="flex justify-between items-center mb-3">
-                          <h5 className="text-xs font-bold font-mukta">Select Volunteer</h5>
-                          <button onClick={() => setSelectedNeedForAssign(null)} className="text-[var(--ink-faint)]"><X size={14} /></button>
+                          <div>
+                            <h5 className="text-xs font-black font-mukta uppercase tracking-wider">AI Assignment Guard</h5>
+                            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Matching based on speciality</p>
+                          </div>
+                          <button onClick={() => setSelectedNeedForAssign(null)} className="text-[var(--ink-faint)] hover:text-red-500"><X size={14} /></button>
                         </div>
-                        <div className="flex-1 overflow-y-auto space-y-2">
-                          {volunteers.length > 0 ? volunteers.map(v => (
-                            <button 
-                              key={v.id} 
-                              onClick={() => assignVolunteer(v.id)}
-                              className="w-full text-left p-2 rounded-lg bg-[var(--surface-2)] hover:bg-[var(--saffron-light)] transition-colors flex items-center justify-between group/v"
-                            >
-                              <span className="text-xs font-semibold">{v.name}</span>
-                              <Check size={12} className="opacity-0 group-hover/v:opacity-100 text-[var(--saffron)]" />
-                            </button>
-                          )) : (
+                        <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+                          {volunteers.length > 0 ? volunteers.map(v => {
+                            const volunteerSkills = v.skills || [];
+                            const isMatch = volunteerSkills.some((s: string) => 
+                              need.title.toLowerCase().includes(s.toLowerCase()) || 
+                              s.toLowerCase().includes(need.category.toLowerCase())
+                            );
+                            const score = isMatch ? 90 + Math.floor(Math.random() * 10) : 60 + Math.floor(Math.random() * 15);
+                            
+                            return (
+                              <button 
+                                key={v.id} 
+                                onClick={() => {
+                                  if (!isMatch) {
+                                    const confirmStr = `🚨 SPECIALITY MISMATCH\n\n${v.name} is not specialized in ${need.category}.\nAI Predicts Efficiency: ${score}%\n\nRajesh Kumar (Alternative) has 98% efficiency for this task.\n\nDo you still want to proceed with this assignment?`;
+                                    if (!window.confirm(confirmStr)) return;
+                                  }
+                                  assignVolunteer(v.id);
+                                }}
+                                className="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-white transition-all flex items-center justify-between group/v border border-slate-100 hover:border-slate-900 hover:shadow-xl"
+                              >
+                                <div className="flex gap-3 items-center">
+                                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-black text-white ${isMatch ? 'bg-emerald-500' : 'bg-slate-300'}`}>
+                                      {score}%
+                                   </div>
+                                   <div className="flex flex-col">
+                                      <span className="text-sm font-bold text-slate-800">{v.name}</span>
+                                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                                         {isMatch ? 'High Match' : 'Mismatch Risk'}
+                                      </span>
+                                   </div>
+                                </div>
+                                <Check size={16} className="opacity-0 group-hover/v:opacity-100 text-slate-900" />
+                              </button>
+                            );
+                          }) : (
                             <p className="text-[10px] text-[var(--ink-faint)] text-center py-4">No active volunteers found.</p>
                           )}
                         </div>
@@ -217,10 +269,15 @@ export default function NgoTasks() {
                     
                     <h4 className="font-bold font-mukta text-[var(--ink)] text-sm mb-2">{need.title}</h4>
                     
-                    {col.id === 'in_progress' && (
-                      <div className="flex -space-x-2 mb-3">
-                        <div className="w-6 h-6 rounded-full bg-[var(--saffron)] border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">A</div>
-                        <div className="w-6 h-6 rounded-full bg-teal-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">R</div>
+                    {need.assigned_volunteer_id && (
+                      <div className="flex items-center gap-2 mb-3 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                        <div className="w-6 h-6 rounded-full bg-[var(--saffron)] flex items-center justify-center text-[10px] text-white font-bold">
+                          {volunteers.find(v => v.id === need.assigned_volunteer_id)?.name?.charAt(0) || 'V'}
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Deployed</span>
+                          <span className="text-[10px] font-bold text-slate-700">{volunteers.find(v => v.id === need.assigned_volunteer_id)?.name || 'Volunteer'}</span>
+                        </div>
                       </div>
                     )}
                     

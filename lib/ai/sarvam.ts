@@ -89,10 +89,51 @@ export async function translateText(text: string, source: string, target: string
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Sarvam API Error Response:", response.status, errorData);
+      return null;
+    }
+
     const data = await response.json();
     return data.translated_text;
   } catch (error) {
-    console.error("Sarvam Translation Error:", error);
+    console.error("Sarvam Translation Fetch Error:", error);
     return null;
+  }
+}
+
+/**
+ * 🌍 Bulk Text Translation (Joins multiple strings with a delimiter to save API calls)
+ */
+export async function translateBulk(texts: string[], source: string, target: string) {
+  if (!texts.length) return [];
+  
+  // Use a very distinctive delimiter that won't be confused with punctuation
+  const DELIMITER = " __TR__ ";
+  const joinedText = texts.join(DELIMITER);
+  
+  try {
+    const translatedJoined = await translateText(joinedText, source, target);
+    if (!translatedJoined) return texts; 
+    
+    // Split by the delimiter, cleaning up any spaces the AI might have added around it
+    let translatedParts = translatedJoined.split(/__TR__/i).map((t: string) => t.trim());
+    
+    // If the split count doesn't match, try common variations (sometimes AI adds spaces or punctuation)
+    if (translatedParts.length !== texts.length) {
+      console.warn(`[Sarvam] Split mismatch. Expected: ${texts.length}, Got: ${translatedParts.length}. Attempting rescue...`);
+      // Just return what we have or pad/clip
+      if (translatedParts.length > texts.length) {
+        translatedParts = translatedParts.slice(0, texts.length);
+      } else {
+        while (translatedParts.length < texts.length) translatedParts.push(texts[translatedParts.length]);
+      }
+    }
+    
+    return translatedParts;
+  } catch (err) {
+    console.error("[Sarvam] Bulk translation failed:", err);
+    return texts;
   }
 }

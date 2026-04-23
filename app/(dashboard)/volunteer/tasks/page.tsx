@@ -5,11 +5,12 @@ import { db } from '@/lib/firebase/config';
 import { collection, query, where, orderBy, onSnapshot, doc, setDoc, updateDoc, limit } from 'firebase/firestore';
 import { useAuthStore } from '@/stores/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, X, CheckCircle2, Zap, Activity } from 'lucide-react';
+import { MapPin, Clock, X, CheckCircle2, Zap, Activity, Phone, Bot } from 'lucide-react';
 import { Need } from '@/types';
 import { UrgencyBadge } from '@/components/shared/UrgencyBadge';
 import { timeAgo } from '@/lib/utils';
 import toast from 'react-hot-toast';
+import { ReporterChat } from '@/components/shared/ReporterChat';
 
 export default function VolunteerTasks() {
   const { user } = useAuthStore();
@@ -17,6 +18,7 @@ export default function VolunteerTasks() {
   const [isSwiping, setIsSwiping] = useState(false);
   const [needs, setNeeds] = useState<Need[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const needsRef = collection(db, 'needs');
@@ -56,7 +58,10 @@ export default function VolunteerTasks() {
             status: 'accepted',
             assigned_at: new Date().toISOString()
           });
-          await updateDoc(doc(db, 'needs', need.id), { status: 'in_progress' });
+          await updateDoc(doc(db, 'needs', need.id), { 
+            status: 'in_progress',
+            assigned_volunteer_id: user?.id 
+          });
           setCurrentIndex(prev => prev + 1);
           resolve(true);
         } catch (error) { reject(error); }
@@ -127,9 +132,16 @@ export default function VolunteerTasks() {
             className="w-full bg-white rounded-[2.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.1)] border border-slate-100 overflow-hidden flex flex-col h-full"
           >
             <div className="p-8 pb-4 flex justify-between items-start">
-              <span className="px-3 py-1 bg-slate-100 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-200">
-                {currentNeed.category}
-              </span>
+              <div className="flex flex-col gap-2">
+                <span className="px-3 py-1 bg-slate-100 text-slate-500 rounded-lg text-[10px] font-black uppercase tracking-widest border border-slate-200 w-fit">
+                  {currentNeed.category}
+                </span>
+                {currentNeed.recommended_volunteer_id === user?.id && (
+                  <span className="px-3 py-1 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md">
+                    <Zap size={10} fill="white" /> AI RECOMMENDED
+                  </span>
+                )}
+              </div>
               <UrgencyBadge score={currentNeed.urgency_score} />
             </div>
 
@@ -142,7 +154,7 @@ export default function VolunteerTasks() {
                 </p>
               </div>
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="space-y-1">
                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Sector</p>
                    <p className="text-sm font-bold text-slate-800 flex items-center gap-2"><MapPin size={14} className="text-red-500" /> {currentNeed.city}</p>
@@ -151,6 +163,23 @@ export default function VolunteerTasks() {
                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Logged</p>
                    <p className="text-sm font-bold text-slate-800 flex items-center gap-2"><Clock size={14} className="text-blue-500" /> {timeAgo(currentNeed.created_at)}</p>
                 </div>
+              </div>
+
+              {/* Communication Hub */}
+              <div className="pt-6 border-t border-slate-50 flex gap-3">
+                 <button 
+                  onClick={() => setIsChatOpen(true)}
+                  className="flex-1 py-3 bg-white border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-500 flex items-center justify-center gap-2 hover:bg-slate-50 hover:text-indigo-600 transition-all shadow-sm"
+                 >
+                    <Bot size={14} /> Message Reporter
+                 </button>
+                 <button 
+                  onClick={() => toast.success('Connecting to NGO Support Node...')}
+                  className="px-4 py-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-slate-900 transition-all shadow-sm"
+                  title="Call NGO Support"
+                 >
+                    <Phone size={18} />
+                 </button>
               </div>
             </div>
             
@@ -178,7 +207,12 @@ export default function VolunteerTasks() {
           </button>
         </div>
       </div>
-      
+
+      <ReporterChat 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        need={currentNeed} 
+      />
     </div>
   );
 }

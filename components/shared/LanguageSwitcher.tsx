@@ -50,38 +50,9 @@ export function LanguageSwitcher({ isSidebar }: { isSidebar?: boolean }) {
           {SUPPORTED_LANGUAGES.map((lang) => (
             <button
               key={lang.code}
-              onClick={async () => { 
+              onClick={() => { 
                 setLanguage(lang.code); 
                 setOpen(false); 
-                // ✨ Sarvam Magic: Translate UI elements
-                if (lang.code !== 'en') {
-                  const toastId = toast.loading(`Translating page to ${lang.native}...`);
-                  try {
-                    // Find all translate-ready text nodes
-                    const elements = document.querySelectorAll('h1, h2, h3, p, span, button');
-                    for (const el of Array.from(elements)) {
-                      // Filter out icons and small bits
-                      if (el.innerText.length > 3 && !el.querySelector('svg')) {
-                        const res = await fetch('/api/ai/translate', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ 
-                            text: el.innerText,
-                            source_language: 'en-IN',
-                            target_language: lang.code + '-IN'
-                          })
-                        });
-                        const data = await res.json();
-                        if (data.translatedText) (el as HTMLElement).innerText = data.translatedText;
-                      }
-                    }
-                    toast.success('Page translated!', { id: toastId });
-                  } catch (e) {
-                    toast.error('Global translation failed.', { id: toastId });
-                  }
-                } else {
-                   window.location.reload(); // Reset to English
-                }
               }}
               className="w-full text-left px-4 py-2 text-sm flex items-center justify-between transition-colors hover:bg-slate-50"
               style={{
