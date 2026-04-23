@@ -53,8 +53,10 @@ export type NgoVerification =
 export interface Profile {
   id: string;
   phone: string | null;
+  email?: string | null;
   full_name: string;
   avatar_url: string | null;
+  profile_image?: string;
   role: UserRole;
   preferred_lang: string;
   is_active: boolean;
