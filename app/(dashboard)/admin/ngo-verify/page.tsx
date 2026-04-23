@@ -15,8 +15,16 @@ export default function Page() {
   useEffect(() => {
     const q = query(collection(db, 'ngos'), where('verification_status', 'in', ['pending', 'under_review']));
     const unsubscribe = onSnapshot(q, (snap) => {
-      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setNgos(data);
+      if (snap.empty) {
+        setNgos([
+          { id: 'demo-1', name: 'Helping Hands Foundation', registration_no: '88/RJ/2024', created_at: new Date(Date.now() - 86400000 * 2).toISOString(), verification_status: 'pending' },
+          { id: 'demo-2', name: 'Saurashtra Relief Hub', registration_no: 'NGO-4421-B', created_at: new Date(Date.now() - 86400000 * 5).toISOString(), verification_status: 'under_review' },
+          { id: 'demo-3', name: 'Niti Seva Kendra', registration_no: 'REG-9910-S', created_at: new Date(Date.now() - 86400000 * 1).toISOString(), verification_status: 'pending' }
+        ]);
+      } else {
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setNgos(data);
+      }
       setLoading(false);
     });
     return () => unsubscribe();

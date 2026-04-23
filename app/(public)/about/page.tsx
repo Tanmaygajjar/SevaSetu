@@ -11,7 +11,7 @@ export default function AboutPage() {
         </div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h1 className="text-5xl md:text-7xl font-bold font-mukta mb-8 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold font-mukta mb-8 leading-tight !text-white">
             Building the digital bridge for civic impact.
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed mb-4">

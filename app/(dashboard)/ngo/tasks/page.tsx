@@ -248,7 +248,20 @@ export default function NgoTasks() {
                     
                     <h4 className="font-bold font-mukta text-[var(--ink)] text-sm mb-2">{need.title}</h4>
                     
-                    {col.id === 'in_progress' && (
+                    {/* 🤖 AI Assignment Visibility */}
+                    {(need as any).assigned_volunteer_name && (
+                      <div className="flex items-center gap-2 mb-3 p-2 bg-blue-50 border border-blue-100 rounded-xl animate-in fade-in slide-in-from-left duration-500">
+                        <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                          <CheckCircle2 size={12} />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-black text-blue-600 uppercase tracking-tighter">AI Self-Appointed</span>
+                          <span className="text-[11px] font-bold text-blue-900">{(need as any).assigned_volunteer_name}</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {col.id === 'in_progress' && !((need as any).assigned_volunteer_name) && (
                       <div className="flex -space-x-2 mb-3">
                         <div className="w-6 h-6 rounded-full bg-[var(--saffron)] border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">A</div>
                         <div className="w-6 h-6 rounded-full bg-teal-500 border-2 border-white flex items-center justify-center text-[10px] text-white font-bold">R</div>

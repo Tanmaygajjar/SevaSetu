@@ -6,6 +6,8 @@ import { db } from '@/lib/firebase/config';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
 import { timeAgo } from '@/lib/utils';
+import { ChatInterface } from '@/components/shared/ChatInterface';
+import { AnimatePresence } from 'framer-motion';
 
 export default function Page() {
   const [selectedVolunteer, setSelectedVolunteer] = useState<any>(null);
@@ -14,6 +16,7 @@ export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
   const [aiScout, setAiScout] = useState<any>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [activeChat, setActiveChat] = useState<any>(null);
 
   useEffect(() => {
     const q = query(collection(db, 'volunteers'), orderBy('updated_at', 'desc'));
@@ -119,7 +122,7 @@ export default function Page() {
             <div className="lg:col-span-8 space-y-4">
                <div className="flex items-center gap-3 text-[var(--saffron)] mb-2">
                   <Sparkles size={24} />
-                  <h2 className="text-xl font-black uppercase tracking-widest font-mukta">AI Talent Scout</h2>
+                  <h2 className="text-xl font-black uppercase tracking-widest font-mukta !text-white">AI Talent Scout</h2>
                </div>
                <p className="text-slate-300 font-medium text-lg leading-relaxed italic">
                   {isAiLoading ? 'Analyzing volunteer pool and strategic capacity...' : aiScout?.strategy || 'Reviewing current workforce logistics...'}
@@ -269,7 +272,9 @@ export default function Page() {
 
                  <div className="mt-auto pt-8 flex gap-3">
                     <button onClick={() => { setSelectedVolunteer(null); toast.success('Pinging volunteer for immediate task...'); }} className="flex-1 py-4 bg-[var(--saffron)] text-white rounded-2xl font-bold shadow-xl shadow-[var(--saffron-glow)] hover:opacity-90">Send Assignment</button>
-                    <button onClick={() => { setSelectedVolunteer(null); toast.success('Chat interface opened.'); }} className="w-14 h-14 bg-[var(--ink)] text-white rounded-2xl flex items-center justify-center hover:opacity-90"><MessageSquare size={20} /></button>
+                    <button onClick={() => { setActiveChat(selectedVolunteer); setSelectedVolunteer(null); }} className="w-14 h-14 bg-[var(--ink)] text-white rounded-2xl flex items-center justify-center hover:opacity-90 transition-all active:scale-90">
+                       <MessageSquare size={20} />
+                    </button>
                  </div>
                  
                  <div className="flex items-center gap-2 mt-4 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
@@ -280,6 +285,17 @@ export default function Page() {
            </div>
         </div>
       )}
+
+      {/* Real-time Chat Interface */}
+      <AnimatePresence>
+        {activeChat && (
+          <ChatInterface 
+            targetUserId={activeChat.id} 
+            targetUserName={activeChat.name} 
+            onClose={() => setActiveChat(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

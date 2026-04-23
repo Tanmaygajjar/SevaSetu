@@ -83,7 +83,7 @@ export default function NgoDashboard() {
         <div className="bg-gradient-to-r from-[var(--ink)] to-slate-800 text-white p-6 rounded-2xl border border-slate-700 shadow-xl animate-in fade-in slide-in-from-top duration-700 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-20"><Sparkles size={40} /></div>
           <div className="flex items-center gap-2 text-[var(--saffron)] font-bold text-xs uppercase tracking-widest mb-3">
-             <Sparkles size={14} /> AI Strategic Summary
+             <Sparkles size={14} /> <span className="!text-white">AI Strategic Summary</span>
           </div>
           <p className="text-sm font-medium leading-relaxed mb-4">{aiInsights.summary}</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -214,9 +214,19 @@ export default function NgoDashboard() {
                         <Clock size={12} className="text-gray-300" />
                      </div>
                      <p className="text-sm font-bold text-[var(--ink)] mb-1 group-hover:text-[var(--saffron)] transition-colors">{f.title}</p>
-                     <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">{f.description}</p>
-                     <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center text-[10px] font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span>ASSIGN VOLUNTEER</span>
+                     <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2 mb-3">{f.description}</p>
+                     
+                     {f.assigned_volunteer_name && (
+                        <div className="flex items-center gap-2 mb-1 p-2 bg-slate-50 border border-slate-100 rounded-xl">
+                           <div className="w-5 h-5 rounded-md bg-[var(--ink)] flex items-center justify-center text-white">
+                              <Users size={10} />
+                           </div>
+                           <p className="text-[9px] font-bold text-slate-700">Matched to: <span className="text-[var(--saffron-dark)]">{f.assigned_volunteer_name}</span></p>
+                        </div>
+                     )}
+
+                     <div className="mt-2 pt-3 border-t border-gray-50 flex justify-between items-center text-[10px] font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span>{f.assigned_volunteer_name ? 'VIEW ASSIGNMENT' : 'ASSIGN VOLUNTEER'}</span>
                         <ArrowRight size={12} />
                      </div>
                   </div>

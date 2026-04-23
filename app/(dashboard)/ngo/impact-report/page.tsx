@@ -110,7 +110,7 @@ export default function Page() {
                  ].map((m, i) => (
                     <div key={i} className="relative z-10">
                        <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest flex items-center gap-2 mb-1">{m.i} {m.l}</p>
-                       <p className="text-3xl font-bold font-mukta">{m.v}</p>
+                       <p className="text-3xl font-bold font-mukta text-white">{m.v}</p>
                     </div>
                  ))}
 
@@ -205,15 +205,15 @@ export default function Page() {
 
                     <div className="grid grid-cols-2 gap-12 pt-8">
                        <section className="space-y-4">
-                          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-widest border-b pb-2">Verified SDG Goals</h3>
+                          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Verified SDG Goals</h3>
                           <div className="grid grid-cols-2 gap-2">
                              {[1, 2, 3, 5, 8, 12, 13, 17].map(g => (
-                                <div key={g} className="h-10 bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-sm text-gray-300">#{g}</div>
+                                <div key={g} className="h-10 bg-indigo-50 border border-indigo-100 flex items-center justify-center font-bold text-sm text-indigo-400">#{g}</div>
                              ))}
                           </div>
                        </section>
                        <section className="space-y-4">
-                          <h3 className="text-xs font-bold text-gray-300 uppercase tracking-widest border-b pb-2">Operational Scope</h3>
+                          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Operational Scope</h3>
                           <div className="space-y-3">
                              <div className="flex justify-between items-end"><p className="text-xs font-bold">Fulfillment</p><p className="text-xl font-bold text-indigo-600">92%</p></div>
                              <div className="h-1 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-600 w-[92%]" /></div>

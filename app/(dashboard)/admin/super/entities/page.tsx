@@ -98,7 +98,7 @@ export default function GlobalEntitiesPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-4 h-[800px]">
           <AuditLedger />
         </div>
       </div>

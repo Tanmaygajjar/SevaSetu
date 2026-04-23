@@ -65,11 +65,11 @@ export function Navbar() {
               </Link>
             ) : (
               <>
-                <Link href="/login" className="btn-ghost text-sm no-underline">
+                <Link href="/login" className="btn-ghost text-sm no-underline whitespace-nowrap">
                   <LogIn size={16} />
                   Login
                 </Link>
-                <Link href="/join" className="btn-primary text-sm no-underline">
+                <Link href="/join" className="btn-primary text-sm no-underline whitespace-nowrap">
                   <UserPlus size={16} />
                   Join Now
                 </Link>

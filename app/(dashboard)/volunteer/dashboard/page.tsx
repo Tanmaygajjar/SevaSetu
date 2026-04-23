@@ -8,7 +8,9 @@ import { useAuthStore } from '@/stores/authStore';
 import { NeedCard } from '@/components/shared/NeedCard';
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
-import { ArrowRight, Award, Clock, Star, Target } from 'lucide-react';
+import { ArrowRight, Award, Clock, Star, Target, MessageSquare, User } from 'lucide-react';
+import { ChatInterface } from '@/components/shared/ChatInterface';
+import { AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { Need, Task } from '@/types';
 
@@ -20,8 +22,10 @@ export default function VolunteerDashboard() {
 
   const [activeTask, setActiveTask] = useState<(Task & { need: Need }) | null>(null);
   const [recommendedNeeds, setRecommendedNeeds] = useState<Need[]>([]);
+  const [chats, setChats] = useState<any[]>([]);
   const [taskLoading, setTaskLoading] = useState(true);
   const [recLoading, setRecLoading] = useState(true);
+  const [activeChat, setActiveChat] = useState<any>(null);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -30,7 +34,7 @@ export default function VolunteerDashboard() {
     const q = query(
       tasksRef,
       where('volunteer_id', '==', user.id),
-      where('status', '==', 'accepted'),
+      where('status', 'in', ['accepted', 'matched', 'assigned']),
       limit(1)
     );
 
@@ -97,9 +101,19 @@ export default function VolunteerDashboard() {
       setRecLoading(false);
     });
 
+    const unsubChats = onSnapshot(query(
+      collection(db, 'chats'),
+      where('participants', 'array-contains', user.id),
+      orderBy('updated_at', 'desc'),
+      limit(3)
+    ), (snapshot) => {
+      setChats(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
     return () => {
       unsubscribeTask();
       unsubscribeRec();
+      unsubChats();
     };
   }, [user?.id]);
 
@@ -165,9 +179,25 @@ export default function VolunteerDashboard() {
               <p className="text-[var(--ink-muted)] text-sm mb-6">{activeTask.need.description}</p>
               
               <div className="flex gap-3">
-                <Link href={`/volunteer/tasks/${activeTask.id}`} className="btn-primary flex-1 justify-center">
-                  View Detail & Map
-                </Link>
+                {activeTask.status === 'matched' ? (
+                  <button 
+                    onClick={async () => {
+                      try {
+                        await updateDoc(doc(db, 'tasks', activeTask.id), { status: 'accepted' });
+                        toast.success('Assignment accepted! On our way.');
+                      } catch (error: any) {
+                        toast.error('Failed to accept: ' + error.message);
+                      }
+                    }}
+                    className="btn-primary flex-1 justify-center bg-blue-600 hover:bg-blue-700"
+                  >
+                    Confirm AI Assignment
+                  </button>
+                ) : (
+                  <Link href={`/volunteer/tasks/${activeTask.id}`} className="btn-primary flex-1 justify-center">
+                    View Detail & Map
+                  </Link>
+                )}
                 <button 
                   onClick={async () => {
                     try {
@@ -196,6 +226,40 @@ export default function VolunteerDashboard() {
               </Link>
             </div>
           )}
+
+          {/* 💬 Live Messaging Section */}
+          <div className="space-y-6 pt-4">
+            <div className="flex items-center justify-between line-b pb-2" style={{ borderBottomColor: 'var(--border)' }}>
+              <h2 className="text-xl font-bold font-mukta flex items-center gap-2">
+                <MessageSquare size={20} className="text-[var(--saffron)]" /> Live Coordination
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {chats.length > 0 ? (
+                chats.map(chat => (
+                  <button 
+                    key={chat.id}
+                    onClick={() => setActiveChat({ id: chat.participants.find((p: string) => p !== user?.id), name: 'NGO Coordinator' })}
+                    className="card p-4 bg-white border-[var(--border)] hover:border-[var(--saffron)] transition-all text-left flex items-center gap-4 group"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-[var(--saffron-light)] group-hover:text-[var(--saffron)] transition-colors">
+                      <User size={24} />
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                       <p className="text-sm font-bold text-[var(--ink)]">NGO Coordinator</p>
+                       <p className="text-[10px] text-[var(--ink-muted)] truncate">{chat.last_message || 'Start coordination...'}</p>
+                    </div>
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </button>
+                ))
+              ) : (
+                <div className="md:col-span-2 p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                  <p className="text-sm text-slate-400 font-bold">No active chats yet. Connect with NGOs through task assignments.</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Right Column - Recommended */}
@@ -226,7 +290,18 @@ export default function VolunteerDashboard() {
         </div>
 
       </div>
-    </div>
+
+    {/* Real-time Chat Interface */}
+    <AnimatePresence>
+      {activeChat && (
+        <ChatInterface 
+          targetUserId={activeChat.id} 
+          targetUserName={activeChat.name} 
+          onClose={() => setActiveChat(null)} 
+        />
+      )}
+    </AnimatePresence>
+  </div>
   );
 }
 

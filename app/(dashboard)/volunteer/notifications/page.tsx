@@ -4,15 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase/config';
 import { collection, query, orderBy, onSnapshot, limit, where } from 'firebase/firestore';
 import { useAuthStore } from '@/stores/authStore';
-import { Bell, ShieldAlert, Clock, CheckCircle } from 'lucide-react';
-import { timeAgo } from '@/lib/utils';
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
+import { Bell, ShieldAlert, Clock, CheckCircle, MessageSquare, Send, User } from 'lucide-react';
+import { ChatInterface } from '@/components/shared/ChatInterface';
+import { AnimatePresence } from 'framer-motion';
+import { timeAgo } from '@/lib/utils';
 
 export default function NotificationsPage() {
   const { user } = useAuthStore();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [broadcasts, setBroadcasts] = useState<any[]>([]);
+  const [chats, setChats] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeChat, setActiveChat] = useState<any>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -39,12 +43,25 @@ export default function NotificationsPage() {
 
     const unsubNotifications = onSnapshot(notificationQuery, (snapshot) => {
       setNotifications(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    // 3. Listen to Active Chats
+    const chatQuery = query(
+      collection(db, 'chats'),
+      where('participants', 'array-contains', user.id),
+      orderBy('updated_at', 'desc'),
+      limit(5)
+    );
+
+    const unsubChats = onSnapshot(chatQuery, (snapshot) => {
+      setChats(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       setIsLoading(false);
     });
 
     return () => {
       unsubBroadcasts();
       unsubNotifications();
+      unsubChats();
     };
   }, [user]);
 
@@ -67,7 +84,35 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
+        {chats.length > 0 && (
+          <div className="space-y-3">
+             <h2 className="text-[10px] font-black text-[var(--saffron)] uppercase tracking-[0.2em] px-2 flex items-center gap-2">
+                <MessageSquare size={14} /> Active Conversations
+             </h2>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {chats.map((chat) => (
+                  <button 
+                    key={chat.id} 
+                    onClick={() => setActiveChat({ id: chat.participants.find((p: string) => p !== user?.id), name: 'NGO Coordinator' })}
+                    className="p-4 rounded-3xl bg-white border border-slate-200 shadow-sm hover:border-[var(--saffron)] transition-all flex items-center gap-4 text-left group"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-[var(--saffron-light)] group-hover:text-[var(--saffron)] transition-colors">
+                      <User size={24} />
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                       <p className="text-sm font-bold text-slate-900">NGO Coordinator</p>
+                       <p className="text-[10px] text-slate-500 truncate">{chat.last_message || 'New coordination message'}</p>
+                    </div>
+                    <div className="text-[9px] font-bold text-[var(--saffron)]">
+                       OPEN
+                    </div>
+                  </button>
+                ))}
+             </div>
+          </div>
+        )}
+
         {broadcasts.length > 0 && (
           <div className="space-y-3">
              <h2 className="text-[10px] font-black text-red-600 uppercase tracking-[0.2em] px-2 flex items-center gap-2">
@@ -114,6 +159,32 @@ export default function NotificationsPage() {
           ))}
         </div>
       </div>
+      
+      {/* Real-time Chat Interface */}
+      <AnimatePresence>
+        {activeChat && (
+          <ChatInterface 
+            targetUserId={activeChat.id} 
+            targetUserName={activeChat.name} 
+            onClose={() => setActiveChat(null)} 
+          />
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+// Sub-component wrapper for chat
+function ChatWrapper({ activeChat, onClose }: { activeChat: any, onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {activeChat && (
+        <ChatInterface 
+          targetUserId={activeChat.id} 
+          targetUserName={activeChat.name} 
+          onClose={onClose} 
+        />
+      )}
+    </AnimatePresence>
   );
 }

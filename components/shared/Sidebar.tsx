@@ -53,6 +53,7 @@ const ROLE_NAV: Record<string, NavItem[]> = {
     { href: '/ngo/analytics', label: 'Analytics', icon: BarChart3 },
     { href: '/ngo/impact-report', label: 'Impact Report', icon: FileText },
     { href: '/ngo/data-intake', label: 'Data Intake', icon: Database },
+    { href: '/ngo/settings', label: 'Settings', icon: Settings },
   ],
   ngo_reporter: [
     { href: '/ngo/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -77,6 +78,7 @@ const ROLE_NAV: Record<string, NavItem[]> = {
     { href: '/govt/ngos', label: 'NGOs', icon: Building2 },
     { href: '/govt/scheme-gaps', label: 'Scheme Gaps', icon: Activity },
     { href: '/govt/reports', label: 'Reports', icon: FileText },
+    { href: '/govt/settings', label: 'Settings', icon: Settings },
   ],
   super_admin: [
     { href: '/admin/super', label: 'Command Center', icon: ShieldAlert },

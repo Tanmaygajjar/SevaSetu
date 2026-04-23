@@ -46,7 +46,7 @@ export function Footer() {
               <li><Link href="/join" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Register NGO</Link></li>
               <li><Link href="/login" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Coordinator Login</Link></li>
               <li><Link href="/impact" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Impact Reports</Link></li>
-              <li><Link href="/ngo/data-intake" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Data Intake API</Link></li>
+              <li><Link href="/data-intake" className="text-gray-300 hover:text-[var(--saffron)] transition-colors text-sm">Data Intake API</Link></li>
             </ul>
           </div>
 

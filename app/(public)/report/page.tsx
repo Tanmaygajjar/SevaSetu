@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Check, MapPin, Mic, SquareSquare, TriangleAlert, AlertCircle, Sparkles } from 'lucide-react';
 import { CATEGORY_LABELS, CATEGORY_COLORS, NeedCategory } from '@/types';
 import { db } from '@/lib/firebase/config';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, query, where, limit, updateDoc } from 'firebase/firestore';
 import { ConfettiCelebration } from '@/components/shared/ConfettiCelebration';
 import toast from 'react-hot-toast';
 import { useUIStore } from '@/stores/uiStore';
@@ -241,8 +241,6 @@ export default function ReportPage() {
       }
 
       // 2. Save to Firestore
-      const needRef = doc(collection(db, 'needs'));
-      const { lat, lng, photos, ...rest } = formData;
       await setDoc(needRef, {
         ...rest,
         location_lat: lat,
@@ -257,7 +255,68 @@ export default function ReportPage() {
         visual_verified: true
       });
       
-      toast.success('Report broadcasted to the grid!', { id: toastId });
+      // 🚀 AI AUTO-ASSIGNMENT LOGIC
+      try {
+        const volSnap = await getDocs(query(collection(db, 'volunteers'), limit(10)));
+        const availableVolunteers = volSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        if (availableVolunteers.length > 0) {
+          toast.loading('AI is matching a specialized volunteer...', { id: toastId });
+          
+          const matchRes = await fetch('/api/ai/volunteer-scout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              volunteers: availableVolunteers,
+              activeNeeds: [{ title: formData.title, category: formData.category, urgency_score: formData.severity }]
+            })
+          });
+          
+          const matchData = await matchRes.json();
+          const bestMatch = matchData.matches?.[0];
+          
+          if (bestMatch) {
+            const matchedVol = availableVolunteers.find(v => (v as any).name === bestMatch.volunteerName || (v as any).profile?.full_name === bestMatch.volunteerName);
+            
+            if (matchedVol) {
+              const taskRef = doc(collection(db, 'tasks'));
+              const now = new Date().toISOString();
+              
+              await setDoc(taskRef, {
+                id: taskRef.id,
+                need_id: needRef.id,
+                volunteer_id: matchedVol.id,
+                status: 'matched',
+                match_score: 95,
+                assigned_at: now,
+                created_at: now,
+                updated_at: now,
+                ai_assigned: true,
+                assignment_reason: bestMatch.reason
+              });
+
+              await updateDoc(needRef, {
+                assigned_volunteer_id: matchedVol.id,
+                assigned_volunteer_name: bestMatch.volunteerName,
+                assignment_reason: bestMatch.reason,
+                status: 'assigned'
+              });
+              
+              toast.success(`AI assigned ${bestMatch.volunteerName} based on ${formData.category} skills!`, { id: toastId, duration: 5000 });
+            } else {
+              toast.success('Report broadcasted to the grid!', { id: toastId });
+            }
+          } else {
+            toast.success('Report broadcasted to the grid!', { id: toastId });
+          }
+        } else {
+          toast.success('Report broadcasted to the grid!', { id: toastId });
+        }
+      } catch (assignError) {
+        console.error("Auto-assign error:", assignError);
+        toast.success('Report broadcasted to the grid!', { id: toastId });
+      }
+
       setShowConfetti(true);
     } catch (error: any) {
       toast.error('Failed to submit: ' + error.message, { id: toastId });
