@@ -120,7 +120,7 @@ export default function JoinPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      {showConfetti && <ConfettiCelebration onComplete={handleFinish} message="Welcome to SevaSetu, Arjun!" />}
+      {showConfetti && <ConfettiCelebration onComplete={handleFinish} message="Welcome to Resource IQ, Arjun!" />}
       
       {/* Progress Bar */}
       <div className="mb-12">

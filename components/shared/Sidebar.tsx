@@ -139,10 +139,10 @@ export function Sidebar() {
             <div>
               <div className="flex items-center gap-1">
                 <span className="text-lg font-bold" style={{ color: 'var(--saffron)', fontFamily: 'var(--font-mukta)' }}>
-                  सेवा
+                  Resource
                 </span>
                 <span className="text-lg font-bold" style={{ color: 'white', fontFamily: 'var(--font-mukta)' }}>
-                  सेतु
+                  {" "}IQ
                 </span>
               </div>
               <span
@@ -155,7 +155,7 @@ export function Sidebar() {
           )}
           {sidebarCollapsed && (
             <span className="text-lg font-bold mx-auto" style={{ color: 'var(--saffron)', fontFamily: 'var(--font-mukta)' }}>
-              से
+              RQ
             </span>
           )}
         </div>

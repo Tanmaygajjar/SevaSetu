@@ -6,7 +6,7 @@ import { SuperAdminListener } from '@/components/shared/SuperAdminListener';
 
 
 export const metadata: Metadata = {
-  title: 'SevaSetu — Connecting Community Needs to Volunteers',
+  title: 'Resource IQ — Connecting Community Needs to Volunteers',
   description: 'AI-powered civic platform connecting community needs with the right volunteers in minutes. Multilingual, real-time, built for India.',
   keywords: ['volunteer', 'community', 'India', 'NGO', 'social impact', 'SDG'],
 };

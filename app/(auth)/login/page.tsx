@@ -52,8 +52,8 @@ export default function LoginPage() {
       <div className="w-full md:w-5/12 bg-[var(--sidebar-bg)] p-8 text-white flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-1 mb-8">
-            <span className="text-3xl font-bold font-mukta text-[var(--saffron)]">सेवा</span>
-            <span className="text-3xl font-bold font-mukta text-white">सेतु</span>
+            <span className="text-3xl font-bold font-mukta text-[var(--saffron)]">Resource</span>
+            <span className="text-3xl font-bold font-mukta text-white"> IQ</span>
           </div>
           <h2 className="text-2xl font-bold font-mukta mb-4">Connecting community needs to volunteers in minutes.</h2>
           <p className="text-gray-600 text-sm mb-8">
@@ -62,7 +62,7 @@ export default function LoginPage() {
           
           <div className="space-y-4">
             <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-              <p className="text-sm italic text-gray-300">"SevaSetu completely transformed how we respond during floods. We found volunteers in 10 minutes instead of hours."</p>
+              <p className="text-sm italic text-gray-300">"Resource IQ completely transformed how we respond during floods. We found volunteers in 10 minutes instead of hours."</p>
               <p className="text-xs text-[var(--saffron)] mt-2 font-bold">— Sanjeevani Relief NGO</p>
             </div>
             <div className="bg-white/5 p-4 rounded-xl border border-white/10">
@@ -79,7 +79,7 @@ export default function LoginPage() {
         {/* Demo Section */}
         <div className="mb-10">
           <h3 className="text-sm font-bold text-[var(--ink-muted)] uppercase tracking-wider mb-4">
-            Try SevaSetu instantly (No signup needed)
+            Try Resource IQ instantly (No signup needed)
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button 
@@ -139,14 +139,14 @@ export default function LoginPage() {
           <button 
             type="button" 
             onClick={() => setLoginMode('otp')}
-            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${loginMode === 'otp' ? 'border-[var(--saffron)] text-[var(--saffron)]' : 'border-transparent text-[var(--ink-faint)]'}`}
+            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${loginMode === 'otp' ? 'border-[var(--saffron)] text-[var(--saffron)]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
           >
             OTP Login
           </button>
           <button 
             type="button" 
             onClick={() => setLoginMode('dev')}
-            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${loginMode === 'dev' ? 'border-[var(--saffron)] text-[var(--saffron)]' : 'border-transparent text-[var(--ink-faint)]'}`}
+            className={`flex-1 py-2 text-sm font-bold border-b-2 transition-colors ${loginMode === 'dev' ? 'border-[var(--saffron)] text-[var(--saffron)]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
           >
             Developer Login
           </button>

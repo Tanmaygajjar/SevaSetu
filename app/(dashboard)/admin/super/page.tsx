@@ -73,7 +73,7 @@ function SuperAdminContent() {
                 </div>
               </div>
               <h1 className="text-4xl md:text-6xl font-black font-mukta tracking-tighter mb-4 leading-tight text-white">Supreme Command <br/><span className="text-red-500">Center</span></h1>
-              <p className="text-slate-200 font-medium max-w-xl text-base md:text-lg">Full-scale governance oversight of the SevaSetu global community infrastructure.</p>
+              <p className="text-slate-200 font-medium max-w-xl text-base md:text-lg">Full-scale governance oversight of the Resource IQ global community infrastructure.</p>
             </div>
             
             <div className="flex flex-wrap gap-4 mt-10">

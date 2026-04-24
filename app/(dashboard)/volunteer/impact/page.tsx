@@ -45,7 +45,7 @@ export default function VolunteerImpact() {
           </h2>
 
           <p className="text-[var(--ink-muted)] px-8 mb-8 leading-relaxed max-w-sm">
-            In recognition of outstanding dedication and service to the community through the SevaSetu platform.
+            In recognition of outstanding dedication and service to the community through the Resource IQ platform.
           </p>
 
           <div className="flex gap-8 mb-8 border-y border-[var(--border)] py-4 w-full justify-center">
@@ -69,8 +69,8 @@ export default function VolunteerImpact() {
               <p className="text-[10px] italic">Platform Verification</p>
             </div>
             <div className="text-center">
-              <p className="font-bold font-mukta text-lg leading-none">सेवा सेतु</p>
-              <p className="text-[10px] italic">SevaSetu System</p>
+              <p className="font-bold font-mukta text-lg leading-none">Resource IQ</p>
+              <p className="text-[10px] italic">Resource IQ System</p>
             </div>
           </div>
         </div>

@@ -212,7 +212,7 @@ export default function NgosPage() {
           <div className="relative z-10 text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold font-mukta mb-4 text-white">Are you an NGO working for change?</h2>
             <p className="text-gray-300 mb-8 px-4">
-              Join the SevaSetu network to find verified volunteers, access disaster mode alerts, and digitize your impact reports.
+              Join the Resource IQ network to find verified volunteers, access disaster mode alerts, and digitize your impact reports.
             </p>
             <div className="flex justify-center gap-4">
               <Link href="/join?role=ngo" className="btn-primary px-8 py-3 text-base">

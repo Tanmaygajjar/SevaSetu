@@ -1,5 +1,5 @@
 /**
- * 🇮🇳 Sarvam AI Utility for SevaSetu
+ * 🇮🇳 Sarvam AI Utility for Resource IQ
  * Handles Speech-to-Text, Text-to-Speech, and Translation
  */
 

@@ -22,7 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   // Restore session from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem('sevasetu_user');
+    const stored = localStorage.getItem('resourceiq_user');
     if (stored) {
       try {
         setUser(JSON.parse(stored));

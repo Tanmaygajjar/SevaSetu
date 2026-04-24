@@ -195,7 +195,7 @@ export default function Page() {
                     <div className="flex justify-between border-b-8 border-indigo-600 pb-8 items-end">
                        <div className="space-y-1">
                           <h1 className="text-5xl font-black font-mukta text-indigo-700 leading-none">IMPACT<br/>AUDIT</h1>
-                          <p className="text-[9px] font-bold text-gray-600 uppercase tracking-[6px]">SEVASETU PROTOCOL</p>
+                          <p className="text-[9px] font-bold text-gray-600 uppercase tracking-[6px]">RESOURCE IQ PROTOCOL</p>
                        </div>
                        <div className="text-right">
                           <p className="text-3xl font-black text-gray-800">2025</p>

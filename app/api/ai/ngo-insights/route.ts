@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { needs } = await request.json();
     
     const prompt = `
-      You are the Strategic Analyst for SevaSetu NGO Command Center.
+      You are the Strategic Analyst for Resource IQ NGO Command Center.
       Today's reported needs: ${needs.length > 0 ? needs.map((n: any) => `${n.title} (Urgency: ${n.urgency_score})`).join("; ") : "No new needs reported today."}
 
       Provide a high-level strategic summary (2 sentences max) of the current situation.

@@ -32,13 +32,13 @@ export function Navbar() {
               className="text-2xl font-bold"
               style={{ fontFamily: 'var(--font-mukta), system-ui', color: 'var(--saffron)' }}
             >
-              सेवा
+              Resource
             </span>
             <span
               className="text-2xl font-bold"
               style={{ fontFamily: 'var(--font-mukta), system-ui', color: 'var(--ink)' }}
             >
-              सेतु
+              IQ
             </span>
           </Link>
 

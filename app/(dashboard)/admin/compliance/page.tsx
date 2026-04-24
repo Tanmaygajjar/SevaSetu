@@ -48,7 +48,7 @@ export default function CompliancePage() {
           <h1 className="text-4xl font-black font-mukta text-slate-900 tracking-tighter uppercase">
             Audit & Compliance <span className="text-slate-400 text-2xl font-light">SOC</span>
           </h1>
-          <p className="text-slate-500 font-medium">Real-time governance and policy enforcement for the SevaSetu network.</p>
+          <p className="text-slate-500 font-medium">Real-time governance and policy enforcement for the Resource IQ network.</p>
         </div>
         
         <div className="flex gap-4">
@@ -114,7 +114,7 @@ export default function CompliancePage() {
                   </div>
                   <div>
                     <h3 className="font-black font-mukta text-lg text-emerald-900">L5 AI Audit Complete</h3>
-                    <p className="text-xs text-emerald-700 font-medium">Platform verified as per SevaSetu v2.1 Standards.</p>
+                    <p className="text-xs text-emerald-700 font-medium">Platform verified as per Resource IQ v2.1 Standards.</p>
                   </div>
                </div>
                <div className="space-y-3">
@@ -217,7 +217,7 @@ export default function CompliancePage() {
               </div>
               <h4 className="font-black font-mukta text-lg uppercase tracking-tight mb-2">Shadow Oversight</h4>
               <p className="text-xs text-slate-400 font-medium leading-relaxed mb-4">
-                The L5 Audit protocol monitors all admin actions silently. Any deviation from SevaSetu governance standards triggers an immediate network-wide freeze of the affected node.
+                The L5 Audit protocol monitors all admin actions silently. Any deviation from Resource IQ governance standards triggers an immediate network-wide freeze of the affected node.
               </p>
               <div className="flex items-center gap-4">
                  <div className="flex -space-x-2">

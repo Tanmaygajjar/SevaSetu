@@ -435,7 +435,7 @@ export default function NeedsMap() {
                  </div>
                  <div className="flex items-center gap-4 p-5 bg-gray-50 rounded-2xl border border-gray-100 text-left hover:border-blue-200 transition-colors">
                     <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600"><MessageSquare size={20} /></div>
-                    <div><p className="text-xs font-bold">Deployment Hub</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Connect with HQ via SevaSetu Chat</p></div>
+                    <div><p className="text-xs font-bold">Deployment Hub</p><p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest">Connect with HQ via Resource IQ Chat</p></div>
                  </div>
               </div>
 

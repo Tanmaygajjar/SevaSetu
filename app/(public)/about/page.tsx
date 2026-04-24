@@ -56,7 +56,7 @@ export default function AboutPage() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto font-medium leading-relaxed mb-10">
-              During a crisis, the bottleneck isn't a lack of compassion—it's a lack of coordination. SevaSetu is the digital infrastructure for a more resilient India.
+              During a crisis, the bottleneck isn't a lack of compassion—it's a lack of coordination. Resource IQ is the digital infrastructure for a more resilient India.
             </p>
           </motion.div>
         </div>
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 <Target size={120} />
               </div>
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold font-mukta mb-8">The SevaSetu Solution</h2>
+                <h2 className="text-4xl font-bold font-mukta mb-8">The Resource IQ Solution</h2>
                 <div className="space-y-8">
                   <div className="flex gap-6">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--saffron)] to-orange-500 flex items-center justify-center font-black text-xl shrink-0">1</div>

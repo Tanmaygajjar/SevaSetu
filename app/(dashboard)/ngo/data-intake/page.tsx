@@ -57,7 +57,7 @@ export default function DataIntakePage() {
 
       await batch.commit();
       
-      toast.success(`Successfully uploaded ${data.length} records to SevaSetu`);
+      toast.success(`Successfully uploaded ${data.length} records to Resource IQ`);
       setData([]);
       setHeaders([]);
     } catch (err: any) {
@@ -73,7 +73,7 @@ export default function DataIntakePage() {
         <h1 className="text-3xl font-bold font-mukta text-[var(--ink)] flex items-center gap-2">
           <Database className="text-teal-600" /> Bulk Data Intake
         </h1>
-        <p className="text-[var(--ink-muted)]">Upload CSV files from legacy systems or offline surveys to instantly sync them with SevaSetu.</p>
+        <p className="text-[var(--ink-muted)]">Upload CSV files from legacy systems or offline surveys to instantly sync them with Resource IQ.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
@@ -152,7 +152,7 @@ export default function DataIntakePage() {
                 className="btn-primary bg-teal-600 hover:bg-teal-700 shadow-teal-500/30"
                 disabled={isUploading}
               >
-                {isUploading ? 'Uploading...' : 'Sync to SevaSetu'} <Check size={16} />
+                {isUploading ? 'Uploading...' : 'Sync to Resource IQ'} <Check size={16} />
               </button>
             </div>
           )}

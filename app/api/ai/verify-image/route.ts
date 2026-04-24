@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     const mimeType = match[1];
     const data = match[2];
 
-    const prompt = `Analyze this image for a civic incident reporting platform (SevaSetu). 
+    const prompt = `Analyze this image for a civic incident reporting platform (Resource IQ). 
     Determine if this is a REAL, AUTHENTIC photograph of a civic issue, emergency, or social need (e.g., potholes, accidents, elderly people needing help, medical issues, fire, flood, etc.).
     Reject images that are:
     1. Screenshots of other apps/websites.
