@@ -52,8 +52,7 @@ export default function LoginPage() {
       <div className="w-full md:w-5/12 bg-[var(--sidebar-bg)] p-8 text-white flex flex-col justify-between">
         <div>
           <div className="flex items-center gap-1 mb-8">
-            <span className="text-3xl font-bold font-mukta text-[var(--saffron)]">Resource</span>
-            <span className="text-3xl font-bold font-mukta text-white"> IQ</span>
+            <span className="text-3xl font-bold font-mukta text-[var(--saffron)]">Sahaayak</span>
           </div>
           <h2 className="text-2xl font-bold font-mukta mb-4">Connecting community needs to volunteers in minutes.</h2>
           <p className="text-gray-600 text-sm mb-8">

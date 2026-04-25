@@ -12,8 +12,7 @@ export function Footer() {
           {/* Col 1 */}
           <div>
             <Link href="/" className="flex items-center gap-1 no-underline mb-4 inline-block">
-              <span className="text-2xl font-bold font-mukta text-[var(--saffron)]">Resource</span>
-              <span className="text-2xl font-bold font-mukta text-white">IQ</span>
+              <span className="text-2xl font-bold font-mukta text-[var(--saffron)]">Sahaayak</span>
             </Link>
             <p className="text-gray-300 text-sm mb-6 max-w-xs">
               AI-powered civic platform connecting community needs with volunteers in real-time. Built for India.
