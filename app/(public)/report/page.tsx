@@ -17,6 +17,33 @@ import { ImageCapture } from '@/components/shared/ImageCapture';
 import { storage } from '@/lib/firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+const compressImage = (file: File, maxWidth: number, quality: number): Promise<string> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = (maxWidth / width) * height;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+    };
+  });
+};
+
 export default function ReportPage() {
   const [step, setStep] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -256,15 +283,11 @@ export default function ReportPage() {
     try {
       const needRef = doc(collection(db, 'needs'));
       
-      // 🛡️ DEMO-FIRST STRATEGY: Use Base64 to bypass CORS issues entirely for the presentation
+      // 🛡️ Compress images to fit within Firestore's 1MB document limit
       const imageUrls: string[] = [];
       for (const file of formData.photos) {
-        const base64 = await new Promise<string>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.readAsDataURL(file);
-        });
-        imageUrls.push(base64);
+        const compressed = await compressImage(file, 800, 0.5);
+        imageUrls.push(compressed);
       }
 
       // 2. Save to Firestore
