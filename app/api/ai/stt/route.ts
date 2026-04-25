@@ -25,9 +25,14 @@ export async function POST(request: Request) {
       apiKeyPrefix: apiKey.substring(0, 8) + '...'
     });
 
+    // Strip codec params from MIME type (e.g. "audio/webm;codecs=opus" → "audio/webm")
+    // Sarvam API rejects MIME types with codec suffixes
+    const rawType = audioFile.type?.split(';')[0] || 'audio/webm';
+    const cleanedBlob = new Blob([await audioFile.arrayBuffer()], { type: rawType });
+
     // Build FormData for Sarvam API directly
     const sarvamForm = new FormData();
-    sarvamForm.append('file', audioFile, 'recording.webm');
+    sarvamForm.append('file', cleanedBlob, 'recording.webm');
     sarvamForm.append('language_code', languageCode || 'unknown');
     sarvamForm.append('model', 'saaras:v3');
     sarvamForm.append('mode', 'transcribe');
