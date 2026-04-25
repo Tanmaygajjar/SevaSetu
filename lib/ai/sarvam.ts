@@ -50,9 +50,10 @@ export async function textToSpeech(text: string, options: SarvamTTSOptions) {
 export async function speechToText(audioFile: Blob, languageCode: string = "hi-IN") {
   try {
     const formData = new FormData();
-    formData.append("file", audioFile);
-    formData.append("language_code", languageCode);
-    formData.append("model", "saaras:v1");
+    formData.append("file", audioFile, "audio.webm");
+    formData.append("language_code", languageCode || "unknown");
+    formData.append("model", "saaras:v3");
+    formData.append("mode", "transcribe");
 
     const response = await fetch(`${BASE_URL}/speech-to-text`, {
       method: "POST",
@@ -62,7 +63,14 @@ export async function speechToText(audioFile: Blob, languageCode: string = "hi-I
       body: formData,
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Sarvam STT Error Response:", response.status, errorText);
+      return null;
+    }
+
     const data = await response.json();
+    console.log("Sarvam STT Success:", data);
     return data.transcript;
   } catch (error) {
     console.error("Sarvam STT Error:", error);

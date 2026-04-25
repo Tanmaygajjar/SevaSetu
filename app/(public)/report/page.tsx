@@ -105,7 +105,13 @@ export default function ReportPage() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      // Use webm format - supported by browsers and Sarvam API
+      const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') 
+        ? 'audio/webm;codecs=opus' 
+        : MediaRecorder.isTypeSupported('audio/webm') 
+          ? 'audio/webm' 
+          : '';
+      const mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -114,7 +120,7 @@ export default function ReportPage() {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: mediaRecorder.mimeType || 'audio/webm' });
         await handleTranscription(audioBlob);
         // Stop all tracks to release mic
         stream.getTracks().forEach(track => track.stop());
@@ -140,16 +146,22 @@ export default function ReportPage() {
   const handleTranscription = async (audioBlob: Blob) => {
     const toastId = toast.loading('Transcribing your voice...');
     try {
-      const formData = new FormData();
-      formData.append('audio', audioBlob);
-      formData.append('language_code', getSarvamLanguage()); 
+      const formPayload = new FormData();
+      formPayload.append('audio', audioBlob, 'recording.webm');
+      formPayload.append('language_code', getSarvamLanguage()); 
 
       const response = await fetch('/api/ai/stt', {
         method: 'POST',
-        body: formData
+        body: formPayload
       });
 
       const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('STT API error:', data);
+        throw new Error(data.error || 'Transcription failed');
+      }
+      
       if (data.transcript) {
         setFormData(prev => ({
           ...prev, 
@@ -161,8 +173,9 @@ export default function ReportPage() {
       } else {
         throw new Error('Transcription empty');
       }
-    } catch (error) {
-      toast.error('Could not understand audio. Try again.', { id: toastId });
+    } catch (error: any) {
+      console.error('STT transcription error:', error);
+      toast.error(error.message || 'Could not understand audio. Try again.', { id: toastId });
     }
   };
 
