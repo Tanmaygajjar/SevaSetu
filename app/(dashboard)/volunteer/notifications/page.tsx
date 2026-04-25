@@ -77,7 +77,7 @@ export default function NotificationsPage() {
           <h1 className="text-3xl font-black font-mukta text-[var(--ink)] tracking-tight flex items-center gap-3">
             <Bell className="text-[var(--saffron)]" /> Notifications
           </h1>
-          <p className="text-[var(--ink-muted)] mt-1 font-medium italic">Direct updates from Resource IQ Command and your matched causes.</p>
+          <p className="text-[var(--ink-muted)] mt-1 font-medium italic">Direct updates from Sahaayak Command and your matched causes.</p>
         </div>
         <div className="text-[10px] font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-widest">
           {allItems.length} TOTAL EVENTS

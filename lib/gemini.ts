@@ -9,7 +9,7 @@ export async function validateNeedDescription(
 ): Promise<{ valid: boolean; flags: string[]; score: number }> {
   try {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const prompt = `You are a content moderator for a social impact platform in India called Resource IQ.
+    const prompt = `You are a content moderator for a social impact platform in India called Sahaayak.
 Analyze this community need report for quality and appropriateness.
 
 Title: ${title}

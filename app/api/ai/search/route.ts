@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { query, categories } = await request.json();
     
     const prompt = `
-      You are the AI Search engine for Resource IQ, a civic platform.
+      You are the AI Search engine for Sahaayak, a civic platform.
       The user typed: "${query}"
       Available categories: ${categories.join(", ")}
 

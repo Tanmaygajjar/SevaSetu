@@ -18,7 +18,7 @@ const DEMO_USERS: Record<string, Profile> = {
   volunteer: {
     id: 'demo-volunteer-001',
     phone: '+919876543210',
-    email: 'arjun@resourceiq.org',
+    email: 'arjun@sahaayak.org',
     full_name: 'Arjun Mehta',
     avatar_url: null,
     profile_image: 'https://i.pravatar.cc/150?u=demo-volunteer-001',
@@ -44,7 +44,7 @@ const DEMO_USERS: Record<string, Profile> = {
   platform_admin: {
     id: 'demo-admin-001',
     phone: '+919876543212',
-    email: 'vikram@resourceiq.gov.in',
+    email: 'vikram@sahaayak.gov.in',
     full_name: 'Vikram Singh',
     avatar_url: null,
     profile_image: 'https://i.pravatar.cc/150?u=demo-admin-001',
@@ -70,7 +70,7 @@ const DEMO_USERS: Record<string, Profile> = {
   super_admin: {
     id: 'demo-super-001',
     phone: '+919876543214',
-    email: 'admin@resourceiq.org',
+    email: 'admin@sahaayak.org',
     full_name: 'System Admin',
     avatar_url: null,
     profile_image: 'https://i.pravatar.cc/150?u=demo-super-001',
@@ -93,7 +93,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     set({ user: null, isAuthenticated: false });
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('resourceiq_user');
+      localStorage.removeItem('sahaayak_user');
       window.location.href = '/login';
     }
   },
@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const demoUser = { ...user, role };
       set({ user: demoUser, isAuthenticated: true, isLoading: false });
       if (typeof window !== 'undefined') {
-        localStorage.setItem('resourceiq_user', JSON.stringify(demoUser));
+        localStorage.setItem('sahaayak_user', JSON.stringify(demoUser));
       }
     }
   },

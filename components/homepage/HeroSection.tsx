@@ -113,7 +113,7 @@ export function HeroSection() {
           )}
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-mukta leading-[1.1] tracking-tight !text-white mb-4 mt-6">
-            <span className="block text-[var(--saffron)] drop-shadow-[0_0_40px_rgba(255,107,53,0.4)]">Resource IQ</span>
+            <span className="block text-[var(--saffron)] drop-shadow-[0_0_40px_rgba(255,107,53,0.4)]">Sahaayak</span>
             <span className="!text-white">Strategic Resource Hub</span>
           </h1>
 

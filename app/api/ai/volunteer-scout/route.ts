@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { volunteers, activeNeeds } = await request.json();
     
     const prompt = `
-      You are the AI Talent Scout for Resource IQ NGO.
+      You are the AI Talent Scout for Sahaayak NGO.
       
       Current Volunteer Pool:
       ${volunteers.map((v: any) => `- ${v.name}: Skills: ${v.skills.join(", ")}, Rating: ${v.rating}, Status: ${v.status}`).join("\n")}

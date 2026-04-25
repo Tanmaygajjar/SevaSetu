@@ -50,7 +50,7 @@ export default function Page() {
           <h1 className="text-2xl md:text-3xl font-bold font-mukta text-[var(--ink)] tracking-tight">
             Institutional Verification Queue
           </h1>
-          <p className="text-[var(--ink-muted)] mt-1 font-medium">Review legal documentation and authorize NGO access to the Resource IQ network.</p>
+          <p className="text-[var(--ink-muted)] mt-1 font-medium">Review legal documentation and authorize NGO access to the Sahaayak network.</p>
         </div>
         <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-xs font-bold uppercase tracking-widest">
           <Shield size={14} /> Compliance Mode

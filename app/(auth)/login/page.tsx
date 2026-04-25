@@ -62,7 +62,7 @@ export default function LoginPage() {
           
           <div className="space-y-4">
             <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-              <p className="text-sm italic text-gray-300">"Resource IQ completely transformed how we respond during floods. We found volunteers in 10 minutes instead of hours."</p>
+              <p className="text-sm italic text-gray-300">"Sahaayak completely transformed how we respond during floods. We found volunteers in 10 minutes instead of hours."</p>
               <p className="text-xs text-[var(--saffron)] mt-2 font-bold">— Sanjeevani Relief NGO</p>
             </div>
             <div className="bg-white/5 p-4 rounded-xl border border-white/10">
@@ -79,7 +79,7 @@ export default function LoginPage() {
         {/* Demo Section */}
         <div className="mb-10">
           <h3 className="text-sm font-bold text-[var(--ink-muted)] uppercase tracking-wider mb-4">
-            Try Resource IQ instantly (No signup needed)
+            Try Sahaayak instantly (No signup needed)
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button 

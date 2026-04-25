@@ -13,12 +13,12 @@ export default function TermsPage() {
           
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-[var(--ink)]">1. Acceptance of Terms</h2>
-            <p>By accessing Resource IQ, you agree to be bound by these Terms of Service and all applicable laws and regulations in India.</p>
+            <p>By accessing Sahaayak, you agree to be bound by these Terms of Service and all applicable laws and regulations in India.</p>
           </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-[var(--ink)]">2. Volunteer Conduct</h2>
-            <p>Volunteers are expected to act with integrity and respect. Resource IQ is a platform for social impact and should not be used for commercial solicitation or harassment.</p>
+            <p>Volunteers are expected to act with integrity and respect. Sahaayak is a platform for social impact and should not be used for commercial solicitation or harassment.</p>
           </section>
 
           <section className="space-y-4">

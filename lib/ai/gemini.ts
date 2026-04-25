@@ -214,7 +214,7 @@ export const generateImpactNarrative = async (stats: any, ngoName: string) => {
     
     The narrative should be 3 paragraphs:
     1. The Challenge (What was the situation?)
-    2. The Action (What did ${ngoName} do using Resource IQ?)
+    2. The Action (What did ${ngoName} do using Sahaayak?)
     3. The Transformation (What is the result today?)
     
     Return JSON: { "narrative": "string" }
@@ -250,7 +250,7 @@ export const forecastResourceNeeds = async (pastUsage: any[], currentTrend: stri
 // 🛡️ ADVANCED: AI Compliance Auditor
 export const auditEntityCompliance = async (ngoData: any, docs: string[]) => {
   const prompt = `
-    Audit this NGO for Resource IQ L5 Compliance.
+    Audit this NGO for Sahaayak L5 Compliance.
     Data: ${JSON.stringify(ngoData)}
     Documents: ${docs.join(", ")}
     

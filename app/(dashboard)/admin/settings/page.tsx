@@ -73,10 +73,10 @@ export default function Page() {
             <h3 className="text-lg font-bold font-mukta flex items-center gap-2 text-indigo-600"><Database size={20} /> Infrastructure Hooks</h3>
             <div className="card p-8 space-y-6">
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div><label className="label">Firebase Project ID</label><input type="text" defaultValue="resourceiq-platform-prod" className="input" /></div>
+                  <div><label className="label">Firebase Project ID</label><input type="text" defaultValue="sahaayak-platform-prod" className="input" /></div>
                   <div><label className="label">GIS Maps Direction Key</label><input type="password" defaultValue="pk_test_42A8F9..." className="input" /></div>
                </div>
-               <div><label className="label">Global Webhook for Disaster Alerts (JSON)</label><input type="text" defaultValue="https://safety-api.gov.in/v1/ingest/resource-iq" className="input" /></div>
+               <div><label className="label">Global Webhook for Disaster Alerts (JSON)</label><input type="text" defaultValue="https://safety-api.gov.in/v1/ingest/sahaayak" className="input" /></div>
             </div>
          </section>
       </div>

@@ -6,9 +6,9 @@ import { Calendar, User, Clock, ArrowRight } from 'lucide-react';
 
 const POSTS = [
   {
-    title: 'How Resource IQ is Scaling Disaster Relief in Gujarat',
+    title: 'How Sahaayak is Scaling Disaster Relief in Gujarat',
     excerpt: 'A deep dive into our AI orchestration during the recent monsoon season.',
-    author: 'Resource IQ Team',
+    author: 'Sahaayak Team',
     date: 'Apr 15, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=800'
@@ -23,7 +23,7 @@ const POSTS = [
   },
   {
     title: 'Transparency in Philanthropy: The Blockchain Ledger',
-    excerpt: 'Understanding how Resource IQ ensures every rupee reaches the intended cause.',
+    excerpt: 'Understanding how Sahaayak ensures every rupee reaches the intended cause.',
     author: 'Tech Architect',
     date: 'Mar 28, 2026',
     readTime: '8 min read',

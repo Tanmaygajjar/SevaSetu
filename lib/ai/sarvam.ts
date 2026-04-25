@@ -1,5 +1,5 @@
 /**
- * 🇮🇳 Sarvam AI Utility for Resource IQ
+ * 🇮🇳 Sarvam AI Utility for Sahaayak
  * Handles Speech-to-Text, Text-to-Speech, and Translation
  */
 

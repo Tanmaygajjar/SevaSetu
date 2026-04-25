@@ -130,7 +130,7 @@ export default function Page() {
                   <Activity size={12} /> Global Sync: Operational
                </div>
                <h2 className="text-4xl md:text-6xl font-black font-mukta text-white tracking-tighter leading-tight">Geographic <br/><span className="text-[var(--saffron)]">Coverage</span> Analysis</h2>
-               <p className="text-slate-400 font-medium max-w-md text-lg leading-relaxed">Visualizing the expansion of Resource IQ's regional nodes across the subcontinent. Real-time telemetry from {cities.length} active hubs.</p>
+               <p className="text-slate-400 font-medium max-w-md text-lg leading-relaxed">Visualizing the expansion of Sahaayak's regional nodes across the subcontinent. Real-time telemetry from {cities.length} active hubs.</p>
                
                <div className="flex gap-4 pt-4">
                   <div className="bg-white/5 border border-white/10 p-5 rounded-3xl flex-1">

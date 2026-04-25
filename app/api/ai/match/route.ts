@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const { volunteerSkills, needs } = await request.json();
     
     const prompt = `
-      You are the Smart Coordinator for Resource IQ.
+      You are the Smart Coordinator for Sahaayak.
       Volunteer Skills: ${volunteerSkills.join(", ")}
       Available Needs: ${needs.map((n: any) => `${n.id}: ${n.title} (${n.category})`).join("; ")}
 

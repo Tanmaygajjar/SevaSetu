@@ -24,7 +24,7 @@ export default function ImpactPage() {
               Measuring Our <span className="text-[var(--saffron)]">Collective Impact</span>
             </h1>
             <p className="text-xl text-gray-400 font-light mb-10 leading-relaxed">
-              Transparent, data-driven insights into how Resource IQ is transforming civic engagement across India.
+              Transparent, data-driven insights into how Sahaayak is transforming civic engagement across India.
             </p>
           </div>
 

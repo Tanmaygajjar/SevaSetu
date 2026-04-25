@@ -115,7 +115,7 @@ export function DonationModal({ ngoName, onClose, onSuccess }: DonationModalProp
                           <Wallet size={20} />
                         </div>
                         <div className="text-left">
-                          <p className="font-bold text-slate-900 text-sm">Resource IQ Demo Wallet</p>
+                          <p className="font-bold text-slate-900 text-sm">Sahaayak Demo Wallet</p>
                           <p className="text-[10px] text-slate-500 font-bold uppercase">Balance: ₹5,000.00</p>
                         </div>
                       </div>
@@ -204,7 +204,7 @@ export function DonationModal({ ngoName, onClose, onSuccess }: DonationModalProp
         {/* Footer Security */}
         <div className="p-4 bg-slate-50 border-t border-slate-100 text-center">
           <p className="text-[10px] font-bold text-slate-400 flex items-center justify-center gap-2">
-            <ShieldCheck size={12} className="text-emerald-500" /> SECURED BY RESOURCE IQ DEMO PAY
+            <ShieldCheck size={12} className="text-emerald-500" /> SECURED BY SAHAAYAK DEMO PAY
           </p>
         </div>
       </motion.div>

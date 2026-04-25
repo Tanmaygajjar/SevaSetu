@@ -63,7 +63,7 @@ export function Footer() {
               <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-[#0A66C2] hover:text-white transition-all">
                 <Heart size={18} />
               </a>
-              <a href="mailto:hello@resourceiq.org" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-white hover:text-black transition-all">
+              <a href="mailto:hello@sahaayak.org" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 hover:bg-white hover:text-black transition-all">
                 <Mail size={18} />
               </a>
             </div>
@@ -76,7 +76,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-white/10 text-center">
           <p className="text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} Resource IQ. Built with <span className="text-[var(--saffron)]">❤</span> for India.
+            &copy; {new Date().getFullYear()} Sahaayak. Built with <span className="text-[var(--saffron)]">❤</span> for India.
           </p>
         </div>
       </div>

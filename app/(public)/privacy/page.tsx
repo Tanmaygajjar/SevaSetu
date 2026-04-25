@@ -13,7 +13,7 @@ export default function PrivacyPage() {
           
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-[var(--ink)]">1. Information We Collect</h2>
-            <p>Resource IQ collects information necessary to connect volunteers with community needs. This includes your name, phone number (for OTP verification), and approximate location if you choose to share it for the Needs Map.</p>
+            <p>Sahaayak collects information necessary to connect volunteers with community needs. This includes your name, phone number (for OTP verification), and approximate location if you choose to share it for the Needs Map.</p>
           </section>
 
           <section className="space-y-4">
@@ -27,7 +27,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 pt-10 border-t">
-            <p className="text-sm">If you have questions about your data, contact us at <span className="text-[var(--saffron)] font-bold">privacy@resourceiq.org</span></p>
+            <p className="text-sm">If you have questions about your data, contact us at <span className="text-[var(--saffron)] font-bold">privacy@sahaayak.org</span></p>
           </section>
         </div>
       </div>

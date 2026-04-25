@@ -21,7 +21,7 @@ export default function DataIntakePublicPage() {
                 Seamless <span className="text-teal-400">Data Intake</span> for Organizations
               </h1>
               <p className="text-xl text-gray-400 font-light mb-10 leading-relaxed max-w-2xl">
-                Connect your legacy systems, survey data, and offline records to the Resource IQ network with our high-speed intake API and bulk upload tools.
+                Connect your legacy systems, survey data, and offline records to the Sahaayak network with our high-speed intake API and bulk upload tools.
               </p>
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
                 <Link 
@@ -45,7 +45,7 @@ export default function DataIntakePublicPage() {
                   <div className="w-3 h-3 rounded-full bg-red-500/50" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
                   <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                  <span className="text-xs text-gray-500 font-mono ml-2">resourceiq-api-v1</span>
+                  <span className="text-xs text-gray-500 font-mono ml-2">sahaayak-api-v1</span>
                 </div>
                 <div className="space-y-4 font-mono text-sm">
                   <div className="flex gap-4 text-teal-400">
@@ -89,7 +89,7 @@ export default function DataIntakePublicPage() {
               },
               {
                 title: 'Secure API Access',
-                desc: 'Authenticated endpoints for real-time synchronization between your existing CRM and Resource IQ.',
+                desc: 'Authenticated endpoints for real-time synchronization between your existing CRM and Sahaayak.',
                 icon: <Shield className="text-indigo-600" />,
               },
               {

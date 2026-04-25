@@ -18,7 +18,7 @@ export function SDGSection() {
             Contributing to UN Sustainable Development Goals
           </h2>
           <p className="text-[var(--ink-muted)] text-lg max-w-2xl mx-auto">
-            Every need resolved on Resource IQ directly contributes to a better, more sustainable future for India.
+            Every need resolved on Sahaayak directly contributes to a better, more sustainable future for India.
           </p>
         </div>
 

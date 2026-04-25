@@ -90,7 +90,7 @@ export default function BroadcastPage() {
                <h2 className="text-3xl font-black font-mukta uppercase tracking-tight text-white">Global Override Input</h2>
             </div>
             
-            <p className="text-slate-300 font-medium text-lg leading-relaxed">This terminal broadcasts directly to the mobile devices of all volunteers and NGOs within the Resource IQ network. Use with extreme caution.</p>
+            <p className="text-slate-300 font-medium text-lg leading-relaxed">This terminal broadcasts directly to the mobile devices of all volunteers and NGOs within the Sahaayak network. Use with extreme caution.</p>
             
             <div className="space-y-4">
               <textarea 

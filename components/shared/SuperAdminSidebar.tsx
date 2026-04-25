@@ -30,7 +30,7 @@ export function SuperAdminSidebar() {
             <Lock size={20} className="text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-black font-mukta tracking-tighter uppercase text-white">Resource IQ</h1>
+            <h1 className="text-xl font-black font-mukta tracking-tighter uppercase text-white">Sahaayak</h1>
             <p className="text-[9px] text-red-500 font-bold tracking-[0.2em] uppercase">Supreme Overseer</p>
           </div>
         </div>
