@@ -58,11 +58,11 @@ export const validateNeedWithAI = async (title: string, description: string) => 
 };
 
 export const getRadarInsights = async (needs: any[]) => {
-  const needsSummary = needs.map(n => ({
+  const needsSummary = needs.slice(0, 10).map(n => ({
     title: n.title,
     category: n.category,
     urgency: n.urgency_score,
-    location: `${n.city}, ${n.ward || 'Unknown Ward'}`
+    location: `${n.city || 'Unknown'}, ${n.ward || 'Unknown Ward'}`
   }));
 
   const prompt = `
@@ -77,37 +77,110 @@ export const getRadarInsights = async (needs: any[]) => {
     4. Predict "Cascading Risks" (what might happen next if these aren't solved).
     5. Identify a "Positive Signal" (something that looks manageable or well-covered).
 
-    Return ONLY a JSON object with keys: hotspot (string), patterns (string[]), recommendations (string[]), risks (string[]), positiveSignal (string).
-    Keep descriptions professional, data-driven, and concise.
+    IMPORTANT: Return ONLY a valid JSON object with these exact keys:
+    {
+      "hotspot": "string describing the primary crisis location",
+      "patterns": ["array of 2-3 pattern strings"],
+      "recommendations": ["array of 2-3 recommendation strings"],
+      "risks": ["array of 2-3 risk strings"],
+      "positiveSignal": "one positive observation string"
+    }
+    
+    Do NOT include any text before or after the JSON. Do NOT wrap in markdown code blocks.
   `;
 
   try {
     if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === "") {
-      return {
-        hotspot: "Rajkot Central",
-        patterns: ["Increasing medical supply requests in urban clusters"],
-        recommendations: ["Pre-position medical teams in Mavdi", "Initiate food supply chain audit"],
-        risks: ["Potential water-borne disease spread if sanitation needs aren't met"],
-        positiveSignal: "Volunteer registration is outpacing new incident reports"
-      };
+      console.warn("GEMINI_API_KEY missing - returning demo radar data");
+      return buildFallbackInsights(needsSummary);
     }
 
+    console.log("AI Radar: Sending", needsSummary.length, "needs to Gemini");
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    const jsonStr = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(jsonStr);
+    console.log("AI Radar: Raw Gemini response:", text.substring(0, 500));
+
+    // Robust JSON extraction
+    const parsed = extractJSON(text);
+    if (parsed && parsed.hotspot) {
+      console.log("AI Radar: Successfully parsed insights");
+      return {
+        hotspot: parsed.hotspot || "Regional Overview",
+        patterns: Array.isArray(parsed.patterns) ? parsed.patterns : ["Pattern analysis in progress"],
+        recommendations: Array.isArray(parsed.recommendations) ? parsed.recommendations : ["Maintain current response levels"],
+        risks: Array.isArray(parsed.risks) ? parsed.risks : ["Monitoring for cascading effects"],
+        positiveSignal: parsed.positiveSignal || "System operational"
+      };
+    }
+
+    console.error("AI Radar: JSON parsed but missing expected keys:", parsed);
+    return buildFallbackInsights(needsSummary);
   } catch (error) {
     console.error("Radar AI Error:", error);
-    return {
-      hotspot: "Regional Overview",
-      patterns: ["Data synthesis in progress"],
-      recommendations: ["Maintain current response levels"],
-      risks: ["Insufficient data for predictive modeling"],
-      positiveSignal: "System heartbeat stable"
-    };
+    return buildFallbackInsights(needsSummary);
   }
 };
+
+// Helper: Extract JSON from potentially messy AI response
+function extractJSON(text: string): any {
+  // Try direct parse first
+  try {
+    return JSON.parse(text.trim());
+  } catch {}
+
+  // Remove markdown code blocks
+  const cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {}
+
+  // Find JSON object by matching braces
+  const startIdx = cleaned.indexOf('{');
+  const lastIdx = cleaned.lastIndexOf('}');
+  if (startIdx !== -1 && lastIdx > startIdx) {
+    try {
+      return JSON.parse(cleaned.substring(startIdx, lastIdx + 1));
+    } catch {}
+  }
+
+  console.error("AI Radar: Could not extract JSON from:", text.substring(0, 300));
+  return null;
+}
+
+// Helper: Build intelligent fallback based on actual needs data
+function buildFallbackInsights(needs: any[]) {
+  const cities = needs.map(n => n.location.split(',')[0].trim());
+  const topCity = cities.sort((a, b) =>
+    cities.filter(c => c === b).length - cities.filter(c => c === a).length
+  )[0] || "Regional Area";
+
+  const categories = needs.map(n => n.category).filter(Boolean);
+  const topCategory = categories.sort((a: string, b: string) =>
+    categories.filter((c: string) => c === b).length - categories.filter((c: string) => c === a).length
+  )[0] || "general";
+
+  const highUrgency = needs.filter(n => (n.urgency || 0) >= 8);
+
+  return {
+    hotspot: `${topCity} — ${highUrgency.length} critical needs detected`,
+    patterns: [
+      `${topCategory.replace('_', ' ')} needs are the dominant category (${categories.filter((c: string) => c === topCategory).length} reports)`,
+      `${highUrgency.length} of ${needs.length} needs have urgency scores above 8.0`,
+      `Activity concentrated in ${[...new Set(cities)].slice(0, 3).join(', ')}`
+    ],
+    recommendations: [
+      `Deploy specialized ${topCategory.replace('_', ' ')} response teams to ${topCity}`,
+      `Establish a forward coordination hub in the most affected ward`,
+      `Initiate volunteer surge recruitment for ${topCategory.replace('_', ' ')} skills`
+    ],
+    risks: [
+      `Delayed response in ${topCity} could escalate ${topCategory.replace('_', ' ')} situations`,
+      `Resource bottleneck likely if more than ${needs.length + 5} concurrent needs arise`,
+    ],
+    positiveSignal: `Active monitoring of ${needs.length} needs indicates platform engagement is healthy`
+  };
+}
 
 // 🌪️ ADVANCED: Predictive Risk Modeling
 export const predictCascadingRisks = async (currentNeeds: any[], weatherData: any) => {
