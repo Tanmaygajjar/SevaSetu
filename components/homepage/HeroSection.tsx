@@ -47,7 +47,7 @@ function HeroStatsDisplay() {
 
   return (
     <>
-      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-3 text-sm shadow-xl">
+      <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-5 text-sm shadow-xl">
         <span className="live-dot" />
         <span className="text-white font-bold tracking-tight">
           Live <span className="text-[var(--saffron)] ml-1">{currentStats.active_today}</span> volunteers active right now
@@ -55,7 +55,7 @@ function HeroStatsDisplay() {
       </div>
 
       {/* Stats row at the bottom */}
-      <div className="flex items-center gap-8 pt-3 border-t border-white/20">
+      <div className="flex items-center gap-8 pt-4 pb-2 border-t border-white/20">
         <Link href="/join" className="flex flex-col hover:opacity-80 transition-opacity group">
           <span className="text-3xl font-black text-white font-mukta tabular-nums group-hover:text-[var(--saffron)] transition-colors">
             {(currentStats.total_volunteers).toLocaleString()}
@@ -100,7 +100,7 @@ export function HeroSection() {
       </div>
 
       {/* Left Content */}
-      <div className="relative z-10 w-full lg:w-1/2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-8 flex flex-col justify-start">
+      <div className="relative z-10 w-full lg:w-1/2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center h-full">
         <div className="max-w-2xl">
           
           {/* Use Stats sub-component only if mounted */}
@@ -112,19 +112,19 @@ export function HeroSection() {
             </div>
           )}
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-mukta leading-[1.1] tracking-tight !text-white mb-3 mt-3">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-mukta leading-[1.1] tracking-tight !text-white mb-4 mt-6">
             <span className="block text-[var(--saffron)] drop-shadow-[0_0_40px_rgba(255,107,53,0.4)]">Resource IQ</span>
             <span className="!text-white">Strategic Resource Hub</span>
           </h1>
 
-          <p className="text-base md:text-lg text-gray-100 font-medium leading-relaxed mb-5 max-w-xl drop-shadow-sm">
+          <p className="text-base md:text-lg text-gray-100 font-medium leading-relaxed mb-8 max-w-xl drop-shadow-sm">
             Connecting community needs to the right volunteer — in minutes. <span className="text-[var(--saffron)] font-bold">Powered by AI.</span> Built for India.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href="/join" 
-              className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-mukta font-bold text-base bg-[var(--saffron)] text-white hover:bg-[var(--saffron-dark)] transition-transform hover:scale-105 active:scale-95 shadow-[0_4px_30px_var(--saffron-glow)]"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-mukta font-bold text-base bg-[var(--saffron)] text-white hover:bg-[var(--saffron-dark)] transition-transform hover:scale-105 active:scale-95 shadow-[0_4px_30px_var(--saffron-glow)]"
             >
               Join as Volunteer
               <ArrowRight size={20} />
@@ -132,7 +132,7 @@ export function HeroSection() {
             
             <Link 
               href="/map" 
-              className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-mukta font-bold text-base bg-white/15 backdrop-blur-md text-white border border-white/30 hover:bg-white/25 transition-colors shadow-lg"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-mukta font-bold text-base bg-white/15 backdrop-blur-md text-white border border-white/30 hover:bg-white/25 transition-colors shadow-lg"
             >
               Explore Needs Map
               <ArrowUpRight size={20} />
