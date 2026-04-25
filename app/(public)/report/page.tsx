@@ -201,22 +201,34 @@ export default function ReportPage() {
       });
 
       const data = await res.json();
+      
+      // If API returned an error or non-OK status, auto-approve
+      if (!res.ok || data.error) {
+        console.warn('Image verification API error, auto-approving:', data.error);
+        setImageValidations(prev => ({ ...prev, [fileId]: { valid: true, analyzing: false } }));
+        toast.success('Image attached successfully', { icon: '📸' });
+        return;
+      }
+
+      const isValid = data.valid !== false; // Default to valid unless explicitly false
       setImageValidations(prev => ({ 
         ...prev, 
         [fileId]: { 
-          valid: data.valid, 
+          valid: isValid, 
           analyzing: false, 
           reason: data.reason 
         } 
       }));
 
-      if (!data.valid) {
+      if (!isValid) {
         toast.error(`Image Rejected: ${data.reason}`, { duration: 5000 });
       } else {
-        toast.success(`Visual Verified: ${data.description}`, { icon: '👁️' });
+        toast.success(`Visual Verified: ${data.description || 'Image accepted'}`, { icon: '👁️' });
       }
     } catch (error) {
-      setImageValidations(prev => ({ ...prev, [fileId]: { valid: true, analyzing: false } })); // Fallback
+      console.error('Image verification failed:', error);
+      setImageValidations(prev => ({ ...prev, [fileId]: { valid: true, analyzing: false } })); // Auto-approve on error
+      toast.success('Image attached successfully', { icon: '📸' });
     }
   };
 
