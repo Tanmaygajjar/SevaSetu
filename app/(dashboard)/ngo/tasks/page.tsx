@@ -168,7 +168,7 @@ export default function NgoTasks() {
         <p className="text-[var(--ink-muted)]">Drag and drop needs to update their status and coordinate volunteer deployment.</p>
       </div>
       
-      <div className="flex-1 flex gap-6 overflow-x-auto pb-4 snap-x hide-scrollbar">
+      <div className="flex-1 grid grid-cols-4 gap-4 pb-4">
         {COLUMNS.map(col => {
           const colNeeds = groupedNeeds[col.id] || [];
           const Icon = col.icon;
@@ -176,7 +176,7 @@ export default function NgoTasks() {
           return (
             <div 
               key={col.id} 
-              className="flex-shrink-0 w-80 bg-[var(--surface-2)] rounded-2xl flex flex-col border border-[var(--border)] snap-center"
+              className="min-w-0 bg-[var(--surface-2)] rounded-2xl flex flex-col border border-[var(--border)]"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, col.id)}
             >
